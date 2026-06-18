@@ -1,0 +1,5 @@
+name = "yothin-portfolio"
+compatibility_date = "2026-06-18"
+
+[assets]
+directory = "./dist"
