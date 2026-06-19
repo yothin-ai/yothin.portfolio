@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KMW Report — Case Study · Yothin Buaphian</title>
+<meta name="description" content="UX/UI case study: KMW Report, an internal financial reporting dashboard." />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --sans: 'Space Grotesk', 'IBM Plex Sans Thai', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'IBM Plex Sans Thai', monospace;
+
+    --bg:        oklch(0.15 0 0);
+    --panel:     oklch(0.09 0.010 285);
+    --card:      oklch(0.10 0.010 285);
+    --ink:       oklch(1.0 0 0);
+    --muted:     oklch(0.72 0.006 80);
+    --faint:     oklch(0.48 0.006 80);
+    --line:      oklch(0.95 0.005 80 / 0.09);
+    --line-soft: oklch(0.95 0.005 80 / 0.05);
+    --accent:    oklch(0.74 0.19 66);
+    --accent-lo: oklch(0.74 0.19 66 / 0.15);
+    --accent-glow: oklch(0.74 0.19 66 / 0.28);
+
+    --maxw: 980px;
+    --pad: clamp(22px, 5vw, 52px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+  /* Top bar */
+  .topbar { border-bottom: 0.5px solid var(--line); }
+  .topbar__inner { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 15px; font-weight: 600; }
+  .logo__dot { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.01em;
+    padding: 10px 18px; border-radius: 999px; border: 0.5px solid var(--line);
+    transition: border-color .18s, color .18s, background .18s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { font-family: var(--mono); }
+
+  /* Language toggle */
+  .lang { display: flex; align-items: center; gap: 2px; border: 0.5px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button {
+    padding: 5px 11px; border: none; border-radius: 999px; cursor: pointer;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+    background: transparent; color: var(--faint); transition: background .18s, color .18s;
+  }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .topbar__right { display: flex; align-items: center; gap: 12px; }
+
+  /* Header */
+  .case-head { padding: clamp(48px, 8vw, 88px) 0 clamp(32px, 5vw, 48px); }
+  .case-head__back { margin-bottom: clamp(28px, 4vw, 44px); }
+  .case-head__meta { font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 14px; }
+  .case-head h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.05; }
+  .case-head__lead { max-width: 56ch; margin: clamp(16px, 2.4vw, 22px) 0 0; color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; }
+
+  /* Cover image */
+  .case-cover {
+    border-radius: 18px; overflow: hidden; border: 0.5px solid var(--line);
+    margin: clamp(32px, 5vw, 56px) 0;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .case-cover img { width: 100%; display: block; }
+
+  /* Gallery */
+  .case-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: clamp(56px, 8vw, 88px); }
+  .case-gallery__item { border-radius: 14px; overflow: hidden; border: 0.5px solid var(--line); background: var(--card); aspect-ratio: 4/3; }
+  .case-gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 720px) { .case-gallery { grid-template-columns: 1fr; } }
+
+  /* Content sections */
+  .case-section { padding-bottom: clamp(48px, 7vw, 72px); }
+  .case-section h2 { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+  .case-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .case-list li { padding-left: 22px; position: relative; color: var(--muted); line-height: 1.65; }
+  .case-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .case-list strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 4px; }
+
+  .case-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 56px); }
+  @media (max-width: 720px) { .case-cols { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* Footer nav */
+  .case-foot { border-top: 0.5px solid var(--line); padding: clamp(40px, 6vw, 64px) 0; text-align: center; }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner wrap">
+      <a class="logo" href="/">
+        <span class="logo__dot"></span>
+        <span>yothin</span>
+      </a>
+      <div class="topbar__right">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="th" aria-pressed="false">TH</button>
+        </div>
+        <a class="btn" href="/#work" data-i18n="backWork">← Back to Work</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="case-head wrap">
+      <div class="case-head__meta" data-i18n="meta">WEB · UX/UI DESIGN</div>
+      <h1>KMW Report</h1>
+      <p class="case-head__lead" data-i18n="lead">UX/UI for an internal financial reporting dashboard — designed for data clarity, role-based access, and a responsive layout that works across devices.</p>
+    </section>
+
+    <div class="wrap">
+      <section class="case-section">
+        <h2 data-i18n="reqTitle">Requirement</h2>
+        <ul class="case-list">
+          <li><strong data-i18n="req1Title">Record every report in one system</strong><span data-i18n="req1Body">Capture financial transactions, raw material usage, and other business data systematically.</span></li>
+          <li><strong data-i18n="req2Title">Retrieve data fast, and keep it secure</strong><span data-i18n="req2Body">Let users pull up past reports quickly, with strong security built in.</span></li>
+          <li><strong data-i18n="req3Title">Control access by role</strong><span data-i18n="req3Body">Give executives full visibility while keeping employee access scoped to what they need.</span></li>
+          <li><strong data-i18n="req4Title">Import and export with ease</strong><span data-i18n="req4Body">Bring in data from Excel or CSV, and export reports as PDF or other formats.</span></li>
+          <li><strong data-i18n="req5Title">Track deadlines automatically</strong><span data-i18n="req5Body">Remind users of submission deadlines and flag data that needs review.</span></li>
+        </ul>
+      </section>
+
+      <section class="case-section">
+        <div class="case-cols">
+          <div>
+            <h2 data-i18n="objTitle">Objective</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="obj1Title">Improve data accuracy</strong><span data-i18n="obj1Body">Cut errors and manual paperwork, and keep records precise.</span></li>
+              <li><strong data-i18n="obj2Title">Save time on everyday tasks</strong><span data-i18n="obj2Body">Let employees record and retrieve data without redundant work.</span></li>
+              <li><strong data-i18n="obj3Title">Streamline internal data management</strong><span data-i18n="obj3Body">Keep storage and retrieval organized, with no lost documents.</span></li>
+              <li><strong data-i18n="obj4Title">Support smarter decisions</strong><span data-i18n="obj4Body">Give the business summary and analytical tools for planning.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h2 data-i18n="goalTitle">Goal</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="goal1Title">Become the company's core reporting tool</strong><span data-i18n="goal1Body">Make report management a standard, company-wide process.</span></li>
+              <li><strong data-i18n="goal2Title">Minimize human error</strong><span data-i18n="goal2Body">Build accuracy into recording and calculations.</span></li>
+              <li><strong data-i18n="goal3Title">Boost operational efficiency</strong><span data-i18n="goal3Body">Cut the time spent generating reports and finding data.</span></li>
+              <li><strong data-i18n="goal4Title">Scale with the business</strong><span data-i18n="goal4Body">Support growth in data volume and users as the business expands.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="case-foot">
+    <a class="btn" href="/#work" data-i18n="backAll">← Back to all projects</a>
+  </footer>
+
+  <script>
+    const CASE_I18N = {
+      en: {
+        backWork: '← Back to Work', backAll: '← Back to all projects',
+        meta: 'WEB · UX/UI DESIGN',
+        lead: 'UX/UI for an internal financial reporting dashboard — designed for data clarity, role-based access, and a responsive layout that works across devices.',
+        reqTitle: 'Requirement',
+        req1Title: 'Record every report in one system', req1Body: 'Capture financial transactions, raw material usage, and other business data systematically.',
+        req2Title: 'Retrieve data fast, and keep it secure', req2Body: 'Let users pull up past reports quickly, with strong security built in.',
+        req3Title: 'Control access by role', req3Body: 'Give executives full visibility while keeping employee access scoped to what they need.',
+        req4Title: 'Import and export with ease', req4Body: 'Bring in data from Excel or CSV, and export reports as PDF or other formats.',
+        req5Title: 'Track deadlines automatically', req5Body: 'Remind users of submission deadlines and flag data that needs review.',
+        objTitle: 'Objective',
+        obj1Title: 'Improve data accuracy', obj1Body: 'Cut errors and manual paperwork, and keep records precise.',
+        obj2Title: 'Save time on everyday tasks', obj2Body: 'Let employees record and retrieve data without redundant work.',
+        obj3Title: 'Streamline internal data management', obj3Body: 'Keep storage and retrieval organized, with no lost documents.',
+        obj4Title: 'Support smarter decisions', obj4Body: 'Give the business summary and analytical tools for planning.',
+        goalTitle: 'Goal',
+        goal1Title: 'Become the company\'s core reporting tool', goal1Body: 'Make report management a standard, company-wide process.',
+        goal2Title: 'Minimize human error', goal2Body: 'Build accuracy into recording and calculations.',
+        goal3Title: 'Boost operational efficiency', goal3Body: 'Cut the time spent generating reports and finding data.',
+        goal4Title: 'Scale with the business', goal4Body: 'Support growth in data volume and users as the business expands.',
+      },
+      th: {
+        backWork: '← กลับไปหน้าผลงาน', backAll: '← กลับไปดูผลงานทั้งหมด',
+        meta: 'เว็บ · UX/UI DESIGN',
+        lead: 'ออกแบบ UX/UI ให้แดชบอร์ดรายงานการเงินภายในองค์กร เน้นความชัดเจนของข้อมูล สิทธิ์การเข้าถึงตามบทบาท และ layout responsive ที่ใช้งานได้ทุกอุปกรณ์',
+        reqTitle: 'ความต้องการ',
+        req1Title: 'บันทึกรายงานทุกประเภทในระบบเดียว', req1Body: 'เก็บข้อมูลธุรกรรมการเงิน การใช้วัตถุดิบ และข้อมูลธุรกิจอื่นๆ อย่างเป็นระบบ',
+        req2Title: 'ดึงข้อมูลได้เร็ว และปลอดภัย', req2Body: 'ให้ผู้ใช้ค้นรายงานเก่าได้รวดเร็ว พร้อมระบบความปลอดภัยที่แข็งแรง',
+        req3Title: 'กำหนดสิทธิ์การเข้าถึงตามบทบาท', req3Body: 'ให้ผู้บริหารเห็นข้อมูลทั้งหมด ส่วนพนักงานเห็นเฉพาะที่เกี่ยวข้อง',
+        req4Title: 'นำเข้าและส่งออกข้อมูลได้ง่าย', req4Body: 'นำเข้าข้อมูลจาก Excel หรือ CSV และส่งออกรายงานเป็น PDF หรือฟอร์แมตอื่น',
+        req5Title: 'ติดตามกำหนดส่งอัตโนมัติ', req5Body: 'เตือนกำหนดส่งรายงานและแจ้งเตือนข้อมูลที่ต้องตรวจสอบ',
+        objTitle: 'วัตถุประสงค์',
+        obj1Title: 'เพิ่มความถูกต้องของข้อมูล', obj1Body: 'ลดความผิดพลาดและงานเอกสารที่ทำมือ ให้ข้อมูลแม่นยำขึ้น',
+        obj2Title: 'ประหยัดเวลาในงานประจำวัน', obj2Body: 'ให้พนักงานบันทึกและค้นข้อมูลได้โดยไม่ต้องทำงานซ้ำซ้อน',
+        obj3Title: 'จัดระบบข้อมูลภายในให้เป็นระเบียบ', obj3Body: 'เก็บและค้นข้อมูลได้อย่างเป็นระบบ ไม่มีเอกสารสูญหาย',
+        obj4Title: 'สนับสนุนการตัดสินใจที่แม่นยำขึ้น', obj4Body: 'มีเครื่องมือสรุปและวิเคราะห์ข้อมูลช่วยวางแผนธุรกิจ',
+        goalTitle: 'เป้าหมาย',
+        goal1Title: 'เป็นเครื่องมือหลักขององค์กร', goal1Body: 'ทำให้การจัดการรายงานเป็นมาตรฐานที่ใช้ทั่วทั้งบริษัท',
+        goal2Title: 'ลดความผิดพลาดจากมนุษย์', goal2Body: 'สร้างความแม่นยำให้การบันทึกและคำนวณข้อมูล',
+        goal3Title: 'เพิ่มประสิทธิภาพการทำงาน', goal3Body: 'ลดเวลาที่ใช้ทำรายงานและการเข้าถึงข้อมูลที่ต้องการ',
+        goal4Title: 'เติบโตไปพร้อมกับธุรกิจ', goal4Body: 'รองรับข้อมูลและผู้ใช้ที่เพิ่มขึ้นตามการขยายตัวของธุรกิจ',
+      },
+    };
+
+    function applyCaseLang(lang) {
+      const t = CASE_I18N[lang];
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] != null) el.textContent = t[key];
+      });
+      document.querySelectorAll('.lang button').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+      localStorage.setItem('lang', lang);
+    }
+
+    document.querySelectorAll('.lang button').forEach(b =>
+      b.addEventListener('click', () => applyCaseLang(b.dataset.lang)));
+
+    applyCaseLang(localStorage.getItem('lang') === 'th' ? 'th' : 'en');
+  </script>
+
+</body>
+</html>

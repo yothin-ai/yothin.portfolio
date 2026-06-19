@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fan Delivery — Case Study · Yothin Buaphian</title>
+<meta name="description" content="UX/UI case study: Fan Delivery, a food delivery app across web and mobile." />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --sans: 'Space Grotesk', 'IBM Plex Sans Thai', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'IBM Plex Sans Thai', monospace;
+
+    --bg:        oklch(0.15 0 0);
+    --panel:     oklch(0.09 0.010 285);
+    --card:      oklch(0.10 0.010 285);
+    --ink:       oklch(1.0 0 0);
+    --muted:     oklch(0.72 0.006 80);
+    --faint:     oklch(0.48 0.006 80);
+    --line:      oklch(0.95 0.005 80 / 0.09);
+    --line-soft: oklch(0.95 0.005 80 / 0.05);
+    --accent:    oklch(0.74 0.19 66);
+    --accent-lo: oklch(0.74 0.19 66 / 0.15);
+    --accent-glow: oklch(0.74 0.19 66 / 0.28);
+
+    --maxw: 980px;
+    --pad: clamp(22px, 5vw, 52px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+  /* Top bar */
+  .topbar { border-bottom: 0.5px solid var(--line); }
+  .topbar__inner { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 15px; font-weight: 600; }
+  .logo__dot { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.01em;
+    padding: 10px 18px; border-radius: 999px; border: 0.5px solid var(--line);
+    transition: border-color .18s, color .18s, background .18s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { font-family: var(--mono); }
+
+  /* Language toggle */
+  .lang { display: flex; align-items: center; gap: 2px; border: 0.5px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button {
+    padding: 5px 11px; border: none; border-radius: 999px; cursor: pointer;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+    background: transparent; color: var(--faint); transition: background .18s, color .18s;
+  }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .topbar__right { display: flex; align-items: center; gap: 12px; }
+
+  /* Header */
+  .case-head { padding: clamp(48px, 8vw, 88px) 0 clamp(32px, 5vw, 48px); }
+  .case-head__back { margin-bottom: clamp(28px, 4vw, 44px); }
+  .case-head__meta { font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 14px; }
+  .case-head h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.05; }
+  .case-head__lead { max-width: 56ch; margin: clamp(16px, 2.4vw, 22px) 0 0; color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; }
+
+  /* Cover image */
+  .case-cover {
+    border-radius: 18px; overflow: hidden; border: 0.5px solid var(--line);
+    margin: clamp(32px, 5vw, 56px) 0;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .case-cover img { width: 100%; display: block; }
+
+  /* Gallery */
+  .case-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: clamp(56px, 8vw, 88px); }
+  .case-gallery__item { border-radius: 14px; overflow: hidden; border: 0.5px solid var(--line); background: var(--card); aspect-ratio: 4/3; }
+  .case-gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 720px) { .case-gallery { grid-template-columns: 1fr; } }
+
+  /* Content sections */
+  .case-section { padding-bottom: clamp(48px, 7vw, 72px); }
+  .case-section h2 { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+  .case-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .case-list li { padding-left: 22px; position: relative; color: var(--muted); line-height: 1.65; }
+  .case-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .case-list strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 4px; }
+
+  .case-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 56px); }
+  @media (max-width: 720px) { .case-cols { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* Footer nav */
+  .case-foot { border-top: 0.5px solid var(--line); padding: clamp(40px, 6vw, 64px) 0; text-align: center; }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner wrap">
+      <a class="logo" href="/">
+        <span class="logo__dot"></span>
+        <span>yothin</span>
+      </a>
+      <div class="topbar__right">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="th" aria-pressed="false">TH</button>
+        </div>
+        <a class="btn" href="/#work" data-i18n="backWork">← Back to Work</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="case-head wrap">
+      <div class="case-head__meta" data-i18n="meta">WEB, MOBILE · UX/UI DESIGN</div>
+      <h1>Fan Delivery</h1>
+      <p class="case-head__lead" data-i18n="lead">Full UX/UI for a food delivery app across web and mobile — from user journey mapping and wireframes to high-fidelity design, validated with feasibility reviews alongside the dev team.</p>
+
+      <div class="case-cover">
+        <img src="/assets/work/fan-delivery.jpg" alt="Fan Delivery platform overview" />
+      </div>
+
+      <div class="case-gallery">
+        <div class="case-gallery__item"><img src="/assets/work/fan-delivery.jpg" alt="Mobile ordering view" /></div>
+        <div class="case-gallery__item"><img src="/assets/work/fan-delivery.jpg" alt="Web order tracking view" /></div>
+        <div class="case-gallery__item"><img src="/assets/work/fan-delivery.jpg" alt="Landing page view" /></div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="case-section">
+        <h2 data-i18n="reqTitle">Requirement</h2>
+        <ul class="case-list">
+          <li><strong data-i18n="req1Title">Order food in a few taps</strong><span data-i18n="req1Body">Let users browse and order from favorite restaurants quickly, without friction.</span></li>
+          <li><strong data-i18n="req2Title">Track orders in real time</strong><span data-i18n="req2Body">Show progress from kitchen to doorstep, so users always know where their food is.</span></li>
+          <li><strong data-i18n="req3Title">Match orders to the nearest rider</strong><span data-i18n="req3Body">Connect restaurants and delivery partners efficiently to keep delivery times short.</span></li>
+          <li><strong data-i18n="req4Title">Support many ways to pay</strong><span data-i18n="req4Body">Accept credit/debit cards, e-Wallets, QR codes, and cash on delivery.</span></li>
+          <li><strong data-i18n="req5Title">Let users rate every order</strong><span data-i18n="req5Body">Keep restaurants and riders accountable through ratings and reviews.</span></li>
+        </ul>
+      </section>
+
+      <section class="case-section">
+        <div class="case-cols">
+          <div>
+            <h2 data-i18n="objTitle">Objective</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="obj1Title">Make ordering effortless</strong><span data-i18n="obj1Body">Give customers a smooth, reliable experience anytime, anywhere.</span></li>
+              <li><strong data-i18n="obj2Title">Help restaurants sell more</strong><span data-i18n="obj2Body">Give partners an efficient channel to reach more customers and grow revenue.</span></li>
+              <li><strong data-i18n="obj3Title">Help riders earn more</strong><span data-i18n="obj3Body">Build a flexible system so delivery partners can work and earn on their own terms.</span></li>
+              <li><strong data-i18n="obj4Title">Raise the bar for delivery service</strong><span data-i18n="obj4Body">Keep improving service quality to stay ahead in a competitive market.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h2 data-i18n="goalTitle">Goal</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="goal1Title">Become a leading delivery platform</strong><span data-i18n="goal1Body">Be the first choice for customers ordering food.</span></li>
+              <li><strong data-i18n="goal2Title">Build a strong restaurant and rider network</strong><span data-i18n="goal2Body">Keep food vendors and delivery partners coordinated and efficient.</span></li>
+              <li><strong data-i18n="goal3Title">Grow customers and order volume</strong><span data-i18n="goal3Body">Use promotions and a seamless experience to attract and retain users.</span></li>
+              <li><strong data-i18n="goal4Title">Scale for what's next</strong><span data-i18n="goal4Body">Support growth with subscriptions, loyalty perks, and pre-orders.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="case-foot">
+    <a class="btn" href="/#work" data-i18n="backAll">← Back to all projects</a>
+  </footer>
+
+  <script>
+    const CASE_I18N = {
+      en: {
+        backWork: '← Back to Work', backAll: '← Back to all projects',
+        meta: 'WEB, MOBILE · UX/UI DESIGN',
+        lead: 'Full UX/UI for a food delivery app across web and mobile — from user journey mapping and wireframes to high-fidelity design, validated with feasibility reviews alongside the dev team.',
+        reqTitle: 'Requirement',
+        req1Title: 'Order food in a few taps', req1Body: 'Let users browse and order from favorite restaurants quickly, without friction.',
+        req2Title: 'Track orders in real time', req2Body: 'Show progress from kitchen to doorstep, so users always know where their food is.',
+        req3Title: 'Match orders to the nearest rider', req3Body: 'Connect restaurants and delivery partners efficiently to keep delivery times short.',
+        req4Title: 'Support many ways to pay', req4Body: 'Accept credit/debit cards, e-Wallets, QR codes, and cash on delivery.',
+        req5Title: 'Let users rate every order', req5Body: 'Keep restaurants and riders accountable through ratings and reviews.',
+        objTitle: 'Objective',
+        obj1Title: 'Make ordering effortless', obj1Body: 'Give customers a smooth, reliable experience anytime, anywhere.',
+        obj2Title: 'Help restaurants sell more', obj2Body: 'Give partners an efficient channel to reach more customers and grow revenue.',
+        obj3Title: 'Help riders earn more', obj3Body: 'Build a flexible system so delivery partners can work and earn on their own terms.',
+        obj4Title: 'Raise the bar for delivery service', obj4Body: 'Keep improving service quality to stay ahead in a competitive market.',
+        goalTitle: 'Goal',
+        goal1Title: 'Become a leading delivery platform', goal1Body: 'Be the first choice for customers ordering food.',
+        goal2Title: 'Build a strong restaurant and rider network', goal2Body: 'Keep food vendors and delivery partners coordinated and efficient.',
+        goal3Title: 'Grow customers and order volume', goal3Body: 'Use promotions and a seamless experience to attract and retain users.',
+        goal4Title: 'Scale for what\'s next', goal4Body: 'Support growth with subscriptions, loyalty perks, and pre-orders.',
+      },
+      th: {
+        backWork: '← กลับไปหน้าผลงาน', backAll: '← กลับไปดูผลงานทั้งหมด',
+        meta: 'เว็บ, มือถือ · UX/UI DESIGN',
+        lead: 'ออกแบบ UX/UI ครบวงจรให้แอปส่งอาหารทั้งเว็บและมือถือ ตั้งแต่ทำ user journey ไปจนถึง wireframe และดีไซน์ความละเอียดสูง พร้อมตรวจสอบความเป็นไปได้ร่วมกับทีม dev ทุกขั้นตอน',
+        reqTitle: 'ความต้องการ',
+        req1Title: 'สั่งอาหารได้ในไม่กี่แตะ', req1Body: 'ให้ผู้ใช้เลือกดูและสั่งร้านที่ชอบได้อย่างรวดเร็ว ไม่สะดุด',
+        req2Title: 'ติดตามออเดอร์แบบเรียลไทม์', req2Body: 'แสดงสถานะตั้งแต่ครัวจนถึงหน้าบ้าน ผู้ใช้รู้ทุกขั้นตอนของอาหารที่สั่ง',
+        req3Title: 'จับคู่ออเดอร์กับไรเดอร์ที่ใกล้ที่สุด', req3Body: 'เชื่อมร้านอาหารกับไรเดอร์อย่างมีประสิทธิภาพ ลดเวลาส่งให้สั้นที่สุด',
+        req4Title: 'รองรับการจ่ายเงินหลายช่องทาง', req4Body: 'รับบัตรเครดิต/เดบิต, e-Wallet, QR code และเงินสดปลายทาง',
+        req5Title: 'ให้ผู้ใช้รีวิวได้ทุกออเดอร์', req5Body: 'สร้างมาตรฐานร้านอาหารและไรเดอร์ผ่านระบบให้คะแนนและรีวิว',
+        objTitle: 'วัตถุประสงค์',
+        obj1Title: 'ทำให้การสั่งอาหารง่ายที่สุด', obj1Body: 'มอบประสบการณ์สั่งอาหารที่ราบรื่นและเชื่อถือได้ทุกที่ทุกเวลา',
+        obj2Title: 'ช่วยร้านอาหารขายได้มากขึ้น', obj2Body: 'เปิดช่องทางให้ร้านค้าเข้าถึงลูกค้าได้มากขึ้นและเพิ่มรายได้',
+        obj3Title: 'ช่วยไรเดอร์หารายได้มากขึ้น', obj3Body: 'สร้างระบบที่ยืดหยุ่น ให้ไรเดอร์เลือกทำงานและสร้างรายได้ตามต้องการ',
+        obj4Title: 'ยกระดับมาตรฐานบริการส่งอาหาร', obj4Body: 'พัฒนาคุณภาพบริการต่อเนื่องเพื่อให้แข่งขันได้ในตลาด',
+        goalTitle: 'เป้าหมาย',
+        goal1Title: 'เป็นผู้นำแพลตฟอร์มส่งอาหาร', goal1Body: 'ทำให้แอปเป็นตัวเลือกอันดับหนึ่งของลูกค้า',
+        goal2Title: 'สร้างเครือข่ายร้านอาหารและไรเดอร์ที่แข็งแรง', goal2Body: 'ให้ร้านค้าและไรเดอร์ทำงานประสานกันได้อย่างมีประสิทธิภาพ',
+        goal3Title: 'เพิ่มฐานลูกค้าและจำนวนออเดอร์', goal3Body: 'ใช้โปรโมชันและประสบการณ์ใช้งานที่ราบรื่นเพื่อดึงดูดและรักษาผู้ใช้',
+        goal4Title: 'ขยายแพลตฟอร์มรองรับการเติบโต', goal4Body: 'เตรียมพร้อมสำหรับฟีเจอร์ใหม่ เช่น สมาชิกรายเดือน ส่วนลดสะสมแต้ม และสั่งล่วงหน้า',
+      },
+    };
+
+    function applyCaseLang(lang) {
+      const t = CASE_I18N[lang];
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] != null) el.textContent = t[key];
+      });
+      document.querySelectorAll('.lang button').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+      localStorage.setItem('lang', lang);
+    }
+
+    document.querySelectorAll('.lang button').forEach(b =>
+      b.addEventListener('click', () => applyCaseLang(b.dataset.lang)));
+
+    applyCaseLang(localStorage.getItem('lang') === 'th' ? 'th' : 'en');
+  </script>
+
+</body>
+</html>

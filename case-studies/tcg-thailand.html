@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TCG Thailand — Case Study · Yothin Buaphian</title>
+<meta name="description" content="UX/UI case study: TCG Thailand, a multi-role trading card e-commerce platform." />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --sans: 'Space Grotesk', 'IBM Plex Sans Thai', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'IBM Plex Sans Thai', monospace;
+
+    --bg:        oklch(0.15 0 0);
+    --panel:     oklch(0.09 0.010 285);
+    --card:      oklch(0.10 0.010 285);
+    --ink:       oklch(1.0 0 0);
+    --muted:     oklch(0.72 0.006 80);
+    --faint:     oklch(0.48 0.006 80);
+    --line:      oklch(0.95 0.005 80 / 0.09);
+    --line-soft: oklch(0.95 0.005 80 / 0.05);
+    --accent:    oklch(0.74 0.19 66);
+    --accent-lo: oklch(0.74 0.19 66 / 0.15);
+    --accent-glow: oklch(0.74 0.19 66 / 0.28);
+
+    --maxw: 980px;
+    --pad: clamp(22px, 5vw, 52px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+  /* Top bar */
+  .topbar { border-bottom: 0.5px solid var(--line); }
+  .topbar__inner { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 15px; font-weight: 600; }
+  .logo__dot { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.01em;
+    padding: 10px 18px; border-radius: 999px; border: 0.5px solid var(--line);
+    transition: border-color .18s, color .18s, background .18s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { font-family: var(--mono); }
+
+  /* Language toggle */
+  .lang { display: flex; align-items: center; gap: 2px; border: 0.5px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button {
+    padding: 5px 11px; border: none; border-radius: 999px; cursor: pointer;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+    background: transparent; color: var(--faint); transition: background .18s, color .18s;
+  }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .topbar__right { display: flex; align-items: center; gap: 12px; }
+
+  /* Header */
+  .case-head { padding: clamp(48px, 8vw, 88px) 0 clamp(32px, 5vw, 48px); }
+  .case-head__back { margin-bottom: clamp(28px, 4vw, 44px); }
+  .case-head__meta { font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 14px; }
+  .case-head h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.05; }
+  .case-head__lead { max-width: 56ch; margin: clamp(16px, 2.4vw, 22px) 0 0; color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; }
+
+  /* Cover image */
+  .case-cover {
+    border-radius: 18px; overflow: hidden; border: 0.5px solid var(--line);
+    margin: clamp(32px, 5vw, 56px) 0;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .case-cover img { width: 100%; display: block; }
+
+  /* Gallery */
+  .case-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: clamp(56px, 8vw, 88px); }
+  .case-gallery__item { border-radius: 14px; overflow: hidden; border: 0.5px solid var(--line); background: var(--card); aspect-ratio: 4/3; }
+  .case-gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 720px) { .case-gallery { grid-template-columns: 1fr; } }
+
+  /* Content sections */
+  .case-section { padding-bottom: clamp(48px, 7vw, 72px); }
+  .case-section h2 { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+  .case-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .case-list li { padding-left: 22px; position: relative; color: var(--muted); line-height: 1.65; }
+  .case-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .case-list strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 4px; }
+
+  .case-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 56px); }
+  @media (max-width: 720px) { .case-cols { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* Footer nav */
+  .case-foot { border-top: 0.5px solid var(--line); padding: clamp(40px, 6vw, 64px) 0; text-align: center; }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner wrap">
+      <a class="logo" href="/">
+        <span class="logo__dot"></span>
+        <span>yothin</span>
+      </a>
+      <div class="topbar__right">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="th" aria-pressed="false">TH</button>
+        </div>
+        <a class="btn" href="/#work" data-i18n="backWork">← Back to Work</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="case-head wrap">
+      <div class="case-head__meta" data-i18n="meta">WEB · UX/UI DESIGN</div>
+      <h1>TCG Thailand</h1>
+      <p class="case-head__lead" data-i18n="lead">End-to-end UX/UI for a multi-role trading card marketplace — customers, merchants, and admins — covering search, checkout, and a component-based design system ready for dev handoff.</p>
+
+      <div class="case-cover">
+        <img src="/assets/work/tcg-thailand.jpg" alt="TCG Thailand platform overview" />
+      </div>
+
+      <div class="case-gallery">
+        <div class="case-gallery__item"><img src="/assets/work/tcg-thailand.jpg" alt="Dashboard view" /></div>
+        <div class="case-gallery__item"><img src="/assets/work/tcg-thailand.jpg" alt="Web checkout view" /></div>
+        <div class="case-gallery__item"><img src="/assets/work/tcg-thailand.jpg" alt="Mobile card detail view" /></div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="case-section">
+        <h2 data-i18n="reqTitle">Requirement</h2>
+        <ul class="case-list">
+          <li><strong data-i18n="req1Title">Buy, sell, and auction in one system</strong><span data-i18n="req1Body">Handle high-volume, simultaneous transactions securely — without slowing buyers or sellers down.</span></li>
+          <li><strong data-i18n="req2Title">Make it usable at every skill level</strong><span data-i18n="req2Body">Let first-time collectors and professional players both navigate with ease.</span></li>
+          <li><strong data-i18n="req3Title">Keep transaction data secure</strong><span data-i18n="req3Body">Store card listings, buyer/seller details, and transaction history reliably, with security built in from the start.</span></li>
+          <li><strong data-i18n="req4Title">Support users past checkout</strong><span data-i18n="req4Body">Resolve issues and guide users through every step, not just the sale.</span></li>
+        </ul>
+      </section>
+
+      <section class="case-section">
+        <div class="case-cols">
+          <div>
+            <h2 data-i18n="objTitle">Objective</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="obj1Title">Grow Thailand's trading card community</strong><span data-i18n="obj1Body">Make the platform the go-to channel for card trading and related activity.</span></li>
+              <li><strong data-i18n="obj2Title">Build trust in the market</strong><span data-i18n="obj2Body">Give users confidence with secure transactions and transparent auctions.</span></li>
+              <li><strong data-i18n="obj3Title">Expand the collector network</strong><span data-i18n="obj3Body">Drive participation through activities and promotions for Thai trading card enthusiasts.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h2 data-i18n="goalTitle">Goal</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="goal1Title">Lead Thailand's trading card market</strong><span data-i18n="goal1Body">Be recognized as the trusted marketplace for buying, selling, and auctioning cards.</span></li>
+              <li><strong data-i18n="goal2Title">Grow users and event participation</strong><span data-i18n="goal2Body">Keep attracting collectors with a system and events built around what they need.</span></li>
+              <li><strong data-i18n="goal3Title">Evolve with the market</strong><span data-i18n="goal3Body">Use user feedback to keep the platform aligned with where the trading card scene is heading.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="case-foot">
+    <a class="btn" href="/#work" data-i18n="backAll">← Back to all projects</a>
+  </footer>
+
+  <script>
+    const CASE_I18N = {
+      en: {
+        backWork: '← Back to Work', backAll: '← Back to all projects',
+        meta: 'WEB · UX/UI DESIGN',
+        lead: 'End-to-end UX/UI for a multi-role trading card marketplace — customers, merchants, and admins — covering search, checkout, and a component-based design system ready for dev handoff.',
+        reqTitle: 'Requirement',
+        req1Title: 'Buy, sell, and auction in one system', req1Body: 'Handle high-volume, simultaneous transactions securely — without slowing buyers or sellers down.',
+        req2Title: 'Make it usable at every skill level', req2Body: 'Let first-time collectors and professional players both navigate with ease.',
+        req3Title: 'Keep transaction data secure', req3Body: 'Store card listings, buyer/seller details, and transaction history reliably, with security built in from the start.',
+        req4Title: 'Support users past checkout', req4Body: 'Resolve issues and guide users through every step, not just the sale.',
+        objTitle: 'Objective',
+        obj1Title: 'Grow Thailand\'s trading card community', obj1Body: 'Make the platform the go-to channel for card trading and related activity.',
+        obj2Title: 'Build trust in the market', obj2Body: 'Give users confidence with secure transactions and transparent auctions.',
+        obj3Title: 'Expand the collector network', obj3Body: 'Drive participation through activities and promotions for Thai trading card enthusiasts.',
+        goalTitle: 'Goal',
+        goal1Title: 'Lead Thailand\'s trading card market', goal1Body: 'Be recognized as the trusted marketplace for buying, selling, and auctioning cards.',
+        goal2Title: 'Grow users and event participation', goal2Body: 'Keep attracting collectors with a system and events built around what they need.',
+        goal3Title: 'Evolve with the market', goal3Body: 'Use user feedback to keep the platform aligned with where the trading card scene is heading.',
+      },
+      th: {
+        backWork: '← กลับไปหน้าผลงาน', backAll: '← กลับไปดูผลงานทั้งหมด',
+        meta: 'เว็บ · UX/UI DESIGN',
+        lead: 'ออกแบบ UX/UI ครบวงจรให้แพลตฟอร์มซื้อขายการ์ดเกมที่มีผู้ใช้หลายบทบาท — ลูกค้า ผู้ขาย และแอดมิน ครอบคลุมตั้งแต่ระบบค้นหาไปจนถึงหน้าชำระเงิน พร้อม design system แบบ component ที่ส่งต่อให้ทีม dev ได้ทันที',
+        reqTitle: 'ความต้องการ',
+        req1Title: 'ซื้อ ขาย และประมูลในระบบเดียว', req1Body: 'รองรับธุรกรรมจำนวนมากพร้อมกันได้อย่างปลอดภัย โดยไม่ทำให้ผู้ซื้อผู้ขายต้องรอนาน',
+        req2Title: 'ใช้งานง่ายทุกระดับ', req2Body: 'ให้ทั้งนักสะสมมือใหม่และนักเล่นมืออาชีพใช้งานได้อย่างคล่องตัว',
+        req3Title: 'ดูแลข้อมูลธุรกรรมให้ปลอดภัย', req3Body: 'จัดเก็บข้อมูลการ์ด ผู้ซื้อ-ผู้ขาย และประวัติธุรกรรมอย่างน่าเชื่อถือ โดยให้ความปลอดภัยเป็นพื้นฐาน',
+        req4Title: 'ดูแลผู้ใช้ต่อหลังการขาย', req4Body: 'ช่วยแก้ปัญหาและแนะนำผู้ใช้ในทุกขั้นตอน ไม่ใช่แค่ตอนซื้อขาย',
+        objTitle: 'วัตถุประสงค์',
+        obj1Title: 'ขยายชุมชนนักสะสมการ์ดในไทย', obj1Body: 'ทำให้แพลตฟอร์มเป็นช่องทางหลักสำหรับการซื้อขายและกิจกรรมเกี่ยวกับการ์ด',
+        obj2Title: 'สร้างความน่าเชื่อถือในตลาด', obj2Body: 'สร้างความมั่นใจให้ผู้ใช้ด้วยธุรกรรมที่ปลอดภัยและการประมูลที่โปร่งใส',
+        obj3Title: 'เพิ่มเครือข่ายนักสะสม', obj3Body: 'กระตุ้นการมีส่วนร่วมผ่านกิจกรรมและโปรโมชันสำหรับนักสะสมไทย',
+        goalTitle: 'เป้าหมาย',
+        goal1Title: 'เป็นผู้นำตลาดการ์ดเกมในไทย', goal1Body: 'ได้รับการยอมรับว่าเป็นมาร์เก็ตเพลสที่น่าเชื่อถือที่สุดสำหรับซื้อ ขาย และประมูลการ์ด',
+        goal2Title: 'เพิ่มผู้ใช้และการมีส่วนร่วมในกิจกรรม', goal2Body: 'ดึงดูดนักสะสมต่อเนื่องด้วยระบบและกิจกรรมที่ตอบโจทย์พวกเขา',
+        goal3Title: 'พัฒนาให้ทันตลาด', goal3Body: 'นำฟีดแบ็กของผู้ใช้มาปรับแพลตฟอร์มให้สอดคล้องกับทิศทางของตลาดการ์ดเกม',
+      },
+    };
+
+    function applyCaseLang(lang) {
+      const t = CASE_I18N[lang];
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] != null) el.textContent = t[key];
+      });
+      document.querySelectorAll('.lang button').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+      localStorage.setItem('lang', lang);
+    }
+
+    document.querySelectorAll('.lang button').forEach(b =>
+      b.addEventListener('click', () => applyCaseLang(b.dataset.lang)));
+
+    applyCaseLang(localStorage.getItem('lang') === 'th' ? 'th' : 'en');
+  </script>
+
+</body>
+</html>

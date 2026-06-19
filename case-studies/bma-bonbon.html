@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BMA บ่นบ่น — Case Study · Yothin Buaphian</title>
+<meta name="description" content="UX/UI case study: BMA บ่นบ่น, a mental wellness platform for emotional support and community." />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --sans: 'Space Grotesk', 'IBM Plex Sans Thai', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'IBM Plex Sans Thai', monospace;
+
+    --bg:        oklch(0.15 0 0);
+    --panel:     oklch(0.09 0.010 285);
+    --card:      oklch(0.10 0.010 285);
+    --ink:       oklch(1.0 0 0);
+    --muted:     oklch(0.72 0.006 80);
+    --faint:     oklch(0.48 0.006 80);
+    --line:      oklch(0.95 0.005 80 / 0.09);
+    --line-soft: oklch(0.95 0.005 80 / 0.05);
+    --accent:    oklch(0.74 0.19 66);
+    --accent-lo: oklch(0.74 0.19 66 / 0.15);
+    --accent-glow: oklch(0.74 0.19 66 / 0.28);
+
+    --maxw: 980px;
+    --pad: clamp(22px, 5vw, 52px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+  /* Top bar */
+  .topbar { border-bottom: 0.5px solid var(--line); }
+  .topbar__inner { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 15px; font-weight: 600; }
+  .logo__dot { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.01em;
+    padding: 10px 18px; border-radius: 999px; border: 0.5px solid var(--line);
+    transition: border-color .18s, color .18s, background .18s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { font-family: var(--mono); }
+
+  /* Language toggle */
+  .lang { display: flex; align-items: center; gap: 2px; border: 0.5px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button {
+    padding: 5px 11px; border: none; border-radius: 999px; cursor: pointer;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+    background: transparent; color: var(--faint); transition: background .18s, color .18s;
+  }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .topbar__right { display: flex; align-items: center; gap: 12px; }
+
+  /* Header */
+  .case-head { padding: clamp(48px, 8vw, 88px) 0 clamp(32px, 5vw, 48px); }
+  .case-head__back { margin-bottom: clamp(28px, 4vw, 44px); }
+  .case-head__meta { font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 14px; }
+  .case-head h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.05; }
+  .case-head__lead { max-width: 56ch; margin: clamp(16px, 2.4vw, 22px) 0 0; color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; }
+
+  /* Cover image */
+  .case-cover {
+    border-radius: 18px; overflow: hidden; border: 0.5px solid var(--line);
+    margin: clamp(32px, 5vw, 56px) 0;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .case-cover img { width: 100%; display: block; }
+
+  /* Gallery */
+  .case-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: clamp(56px, 8vw, 88px); }
+  .case-gallery__item { border-radius: 14px; overflow: hidden; border: 0.5px solid var(--line); background: var(--card); aspect-ratio: 4/3; }
+  .case-gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 720px) { .case-gallery { grid-template-columns: 1fr; } }
+
+  /* Content sections */
+  .case-section { padding-bottom: clamp(48px, 7vw, 72px); }
+  .case-section h2 { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+  .case-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .case-list li { padding-left: 22px; position: relative; color: var(--muted); line-height: 1.65; }
+  .case-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .case-list strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 4px; }
+
+  .case-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 56px); }
+  @media (max-width: 720px) { .case-cols { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* Footer nav */
+  .case-foot { border-top: 0.5px solid var(--line); padding: clamp(40px, 6vw, 64px) 0; text-align: center; }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner wrap">
+      <a class="logo" href="/">
+        <span class="logo__dot"></span>
+        <span>yothin</span>
+      </a>
+      <div class="topbar__right">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="th" aria-pressed="false">TH</button>
+        </div>
+        <a class="btn" href="/#work" data-i18n="backWork">← Back to Work</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="case-head wrap">
+      <div class="case-head__meta" data-i18n="meta">RESPONSIVE WEB · UX/UI DESIGN</div>
+      <h1>BMA บ่นบ่น</h1>
+      <p class="case-head__lead" data-i18n="lead">UX/UI for a mental wellness platform built around emotional support and community — designed to feel accessible, warm, and trustworthy in a sensitive context.</p>
+
+      <div class="case-cover">
+        <img src="/assets/work/bma-bonbon.jpg" alt="BMA บ่นบ่น platform overview" />
+      </div>
+
+      <div class="case-gallery">
+        <div class="case-gallery__item"><img src="/assets/work/bma-bonbon.jpg" alt="Community feed view" /></div>
+        <div class="case-gallery__item"><img src="/assets/work/bma-bonbon.jpg" alt="Mobile post view" /></div>
+        <div class="case-gallery__item"><img src="/assets/work/bma-bonbon.jpg" alt="Admin dashboard view" /></div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="case-section">
+        <h2 data-i18n="reqTitle">Requirement</h2>
+        <ul class="case-list">
+          <li><strong data-i18n="req1Title">Give people a safe space to open up</strong><span data-i18n="req1Body">Let those facing sadness or distress share their feelings without fear of judgment.</span></li>
+          <li><strong data-i18n="req2Title">Protect anonymity by default</strong><span data-i18n="req2Body">Let users express themselves without revealing their identity.</span></li>
+          <li><strong data-i18n="req3Title">Connect people to support that helps</strong><span data-i18n="req3Body">Pair peer support from people with similar experiences with guidance from certified psychologists and counselors.</span></li>
+          <li><strong data-i18n="req4Title">Screen content to keep the space safe</strong><span data-i18n="req4Body">Catch harmful content, like self-harm encouragement or toxic language, before it spreads.</span></li>
+        </ul>
+      </section>
+
+      <section class="case-section">
+        <div class="case-cols">
+          <div>
+            <h2 data-i18n="objTitle">Objective</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="obj1Title">Make space for emotional release</strong><span data-i18n="obj1Body">Let those who feel alone or unheard express themselves without criticism.</span></li>
+              <li><strong data-i18n="obj2Title">Build an empathetic community</strong><span data-i18n="obj2Body">Encourage people to share experiences and support each other.</span></li>
+              <li><strong data-i18n="obj3Title">Connect users to the right support</strong><span data-i18n="obj3Body">Link them to mental health resources and professional counseling.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h2 data-i18n="goalTitle">Goal</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="goal1Title">Ease loneliness and emotional distress</strong><span data-i18n="goal1Body">Become a resource people turn to for relief and real solutions.</span></li>
+              <li><strong data-i18n="goal2Title">Raise awareness for mental health</strong><span data-i18n="goal2Body">Show the value of well-being and community support.</span></li>
+              <li><strong data-i18n="goal3Title">Build a safe, reliable platform for everyone</strong><span data-i18n="goal3Body">Keep the space secure and dependable for all users.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="case-foot">
+    <a class="btn" href="/#work" data-i18n="backAll">← Back to all projects</a>
+  </footer>
+
+  <script>
+    const CASE_I18N = {
+      en: {
+        backWork: '← Back to Work', backAll: '← Back to all projects',
+        meta: 'RESPONSIVE WEB · UX/UI DESIGN',
+        lead: 'UX/UI for a mental wellness platform built around emotional support and community — designed to feel accessible, warm, and trustworthy in a sensitive context.',
+        reqTitle: 'Requirement',
+        req1Title: 'Give people a safe space to open up', req1Body: 'Let those facing sadness or distress share their feelings without fear of judgment.',
+        req2Title: 'Protect anonymity by default', req2Body: 'Let users express themselves without revealing their identity.',
+        req3Title: 'Connect people to support that helps', req3Body: 'Pair peer support from people with similar experiences with guidance from certified psychologists and counselors.',
+        req4Title: 'Screen content to keep the space safe', req4Body: 'Catch harmful content, like self-harm encouragement or toxic language, before it spreads.',
+        objTitle: 'Objective',
+        obj1Title: 'Make space for emotional release', obj1Body: 'Let those who feel alone or unheard express themselves without criticism.',
+        obj2Title: 'Build an empathetic community', obj2Body: 'Encourage people to share experiences and support each other.',
+        obj3Title: 'Connect users to the right support', obj3Body: 'Link them to mental health resources and professional counseling.',
+        goalTitle: 'Goal',
+        goal1Title: 'Ease loneliness and emotional distress', goal1Body: 'Become a resource people turn to for relief and real solutions.',
+        goal2Title: 'Raise awareness for mental health', goal2Body: 'Show the value of well-being and community support.',
+        goal3Title: 'Build a safe, reliable platform for everyone', goal3Body: 'Keep the space secure and dependable for all users.',
+      },
+      th: {
+        backWork: '← กลับไปหน้าผลงาน', backAll: '← กลับไปดูผลงานทั้งหมด',
+        meta: 'เว็บ Responsive · UX/UI DESIGN',
+        lead: 'ออกแบบ UX/UI ให้แพลตฟอร์มสุขภาพใจที่เน้นการให้กำลังใจและความรู้สึกเป็นส่วนหนึ่งของชุมชน ออกแบบให้เข้าถึงง่าย อบอุ่น และน่าเชื่อถือ เหมาะกับบริบทที่ละเอียดอ่อน',
+        reqTitle: 'ความต้องการ',
+        req1Title: 'เปิดพื้นที่ปลอดภัยให้ระบายความรู้สึก', req1Body: 'ให้คนที่กำลังเศร้าหรือทุกข์ใจ ได้แชร์ความรู้สึกโดยไม่ต้องกลัวถูกตัดสิน',
+        req2Title: 'ปกป้องความเป็นนิรนามเป็นค่าเริ่มต้น', req2Body: 'ให้ผู้ใช้แสดงตัวตนได้โดยไม่ต้องเปิดเผยชื่อจริง',
+        req3Title: 'เชื่อมผู้ใช้กับความช่วยเหลือที่ใช่', req3Body: 'ผสานการให้กำลังใจจากคนที่ผ่านประสบการณ์คล้ายกัน เข้ากับคำแนะนำจากนักจิตวิทยาและที่ปรึกษาที่ได้รับการรับรอง',
+        req4Title: 'คัดกรองเนื้อหาเพื่อความปลอดภัย', req4Body: 'ดักจับเนื้อหาที่เป็นอันตราย เช่น การกระตุ้นทำร้ายตัวเองหรือถ้อยคำที่เป็นพิษ ก่อนที่จะแพร่กระจาย',
+        objTitle: 'วัตถุประสงค์',
+        obj1Title: 'เปิดพื้นที่ให้ปลดปล่อยความรู้สึก', obj1Body: 'ให้คนที่รู้สึกโดดเดี่ยวหรือไม่มีใครรับฟัง ได้พูดออกมาโดยไม่ถูกตัดสิน',
+        obj2Title: 'สร้างชุมชนที่เข้าใจกัน', obj2Body: 'กระตุ้นให้ผู้ใช้แชร์ประสบการณ์และให้กำลังใจซึ่งกันและกัน',
+        obj3Title: 'เชื่อมผู้ใช้กับความช่วยเหลือที่เหมาะสม', obj3Body: 'เปิดทางเข้าถึงแหล่งข้อมูลสุขภาพใจและบริการให้คำปรึกษาจากผู้เชี่ยวชาญ',
+        goalTitle: 'เป้าหมาย',
+        goal1Title: 'ลดความโดดเดี่ยวและความทุกข์ใจในสังคม', goal1Body: 'ทำให้แพลตฟอร์มเป็นที่พึ่งของคนที่มองหาทางออกและการเยียวยาใจ',
+        goal2Title: 'สร้างความตระหนักด้านสุขภาพใจ', goal2Body: 'สื่อสารความสำคัญของสุขภาพใจและพลังของการสนับสนุนจากชุมชน',
+        goal3Title: 'สร้างแพลตฟอร์มที่ปลอดภัยและน่าเชื่อถือสำหรับทุกคน', goal3Body: 'ดูแลให้พื้นที่นี้ปลอดภัยและน่าเชื่อถือสำหรับผู้ใช้ทุกคน',
+      },
+    };
+
+    function applyCaseLang(lang) {
+      const t = CASE_I18N[lang];
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] != null) el.textContent = t[key];
+      });
+      document.querySelectorAll('.lang button').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+      localStorage.setItem('lang', lang);
+    }
+
+    document.querySelectorAll('.lang button').forEach(b =>
+      b.addEventListener('click', () => applyCaseLang(b.dataset.lang)));
+
+    applyCaseLang(localStorage.getItem('lang') === 'th' ? 'th' : 'en');
+  </script>
+
+</body>
+</html>
