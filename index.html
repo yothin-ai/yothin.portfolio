@@ -231,21 +231,64 @@
   .hero__sub { max-width: 52ch; margin: clamp(22px, 3vw, 32px) 0 0; color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; text-wrap: pretty; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(30px, 4vw, 42px); }
 
-  /* Portrait */
-  .portrait { flex: 0 1 330px; min-width: 230px; position: relative; z-index: 1; }
-  .portrait__frame {
-    position: relative; aspect-ratio: 4/5; border: 0.5px solid oklch(0.74 0.19 66 / 0.30); border-radius: 18px;
-    background: var(--card);
-    background-image: repeating-linear-gradient(45deg, oklch(0.74 0.19 66 / 0.06) 0 1px, transparent 1px 11px);
-    overflow: hidden;
-    box-shadow: 0 0 40px oklch(0.74 0.19 66 / 0.08);
+  /* Hero Tools Orbit */
+  .portrait { flex: 0 1 420px; min-width: 280px; position: relative; z-index: 1; }
+  .hero-tools {
+    position: relative;
+    width: 100%; aspect-ratio: 1;
+    max-width: 400px; margin: 0 auto;
   }
-  .portrait__tag {
-    position: absolute; top: 14px; left: 14px; white-space: nowrap;
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; color: var(--faint);
-    background: var(--bg); border: 0.5px solid var(--line); border-radius: 999px; padding: 5px 11px;
+  .tool-ring {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid oklch(0.95 0.005 80 / 0.07);
+    pointer-events: none;
   }
-  .portrait__dot { position: absolute; bottom: 14px; right: 14px; width: 10px; height: 10px; border-radius: 2px; background: var(--accent); }
+  .tool-ring--1 { width: 40%;  height: 40%; }
+  .tool-ring--2 { width: 68%;  height: 68%; }
+  .tool-ring--3 { width: 96%;  height: 96%; }
+
+  .tool-node {
+    position: absolute;
+    left: var(--tx); top: var(--ty);
+    transform: translate(-50%, -50%);
+    animation: tool-float var(--tdur, 6s) ease-in-out infinite alternate;
+    animation-delay: var(--tdelay, 0s);
+    cursor: default;
+  }
+  @keyframes tool-float {
+    from { transform: translate(-50%, -50%) translateY(0px); }
+    to   { transform: translate(-50%, -50%) translateY(-9px); }
+  }
+  .tool-node__icon {
+    width: 54px; height: 54px; border-radius: 15px;
+    background: oklch(0.10 0.010 285);
+    border: 1px solid oklch(0.95 0.005 80 / 0.10);
+    display: flex; align-items: center; justify-content: center;
+    padding: 13px;
+    transition: transform .22s cubic-bezier(0.34,1.56,0.64,1), box-shadow .22s, border-color .22s;
+    box-shadow: 0 4px 18px -6px var(--tcolor, rgba(255,255,255,0.15));
+  }
+  .tool-node:hover .tool-node__icon {
+    transform: scale(1.18);
+    border-color: var(--tcolor, rgba(255,255,255,0.2));
+    box-shadow: 0 8px 28px -6px var(--tcolor, rgba(255,255,255,0.3));
+  }
+  .tool-node__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .tool-node__letter {
+    font-family: var(--mono); font-size: 12px; font-weight: 700;
+    color: var(--tcolor);
+  }
+  .tool-node__name {
+    position: absolute; top: calc(100% + 6px); left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
+    color: var(--faint); white-space: nowrap;
+    opacity: 0; transition: opacity .16s;
+    pointer-events: none;
+  }
+  .tool-node:hover .tool-node__name { opacity: 1; }
 
   /* =========================================================
      ABOUT
@@ -552,9 +595,50 @@
           </div>
         </div>
         <div class="portrait" data-animate style="transition-delay:0.22s">
-          <div class="portrait__frame">
-            <span class="portrait__tag">PORTRAIT · 4:5</span>
-            <span class="portrait__dot"></span>
+          <div class="hero-tools" aria-hidden="true">
+            <!-- Rings -->
+            <div class="tool-ring tool-ring--1"></div>
+            <div class="tool-ring tool-ring--2"></div>
+            <div class="tool-ring tool-ring--3"></div>
+            <!-- Ring 1 icons (r≈20%) -->
+            <div class="tool-node" style="--tx:50%;--ty:30%;--tcolor:#A259FF;--tdelay:0s;--tdur:5.8s">
+              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/figma/A259FF" alt="Figma"></div>
+              <span class="tool-node__name">Figma</span>
+            </div>
+            <div class="tool-node" style="--tx:38%;--ty:69%;--tcolor:#E07820;--tdelay:0.7s;--tdur:6.4s">
+              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/anthropic/E07820" alt="Claude AI"></div>
+              <span class="tool-node__name">Claude AI</span>
+            </div>
+            <div class="tool-node" style="--tx:62%;--ty:69%;--tcolor:#F472B6;--tdelay:1.4s;--tdur:5.4s">
+              <div class="tool-node__icon"><span class="tool-node__letter">Lv</span></div>
+              <span class="tool-node__name">Lovable</span>
+            </div>
+            <!-- Ring 2 icons (r≈34%) -->
+            <div class="tool-node" style="--tx:84%;--ty:50%;--tcolor:#22D3EE;--tdelay:0.4s;--tdur:7.0s">
+              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/windsurf/22D3EE" alt="Windsurf"></div>
+              <span class="tool-node__name">Windsurf</span>
+            </div>
+            <div class="tool-node" style="--tx:32%;--ty:81%;--tcolor:#60A5FA;--tdelay:1.1s;--tdur:6.2s">
+              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/framer/60A5FA" alt="Framer"></div>
+              <span class="tool-node__name">Framer</span>
+            </div>
+            <div class="tool-node" style="--tx:32%;--ty:19%;--tcolor:#818CF8;--tdelay:1.8s;--tdur:5.6s">
+              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/googlegemini/818CF8" alt="Gemini"></div>
+              <span class="tool-node__name">Gemini Pro</span>
+            </div>
+            <!-- Ring 3 icons (r≈46%) -->
+            <div class="tool-node" style="--tx:82%;--ty:82%;--tcolor:#FB923C;--tdelay:0.9s;--tdur:6.8s">
+              <div class="tool-node__icon"><span class="tool-node__letter">Ai</span></div>
+              <span class="tool-node__name">Illustrator</span>
+            </div>
+            <div class="tool-node" style="--tx:6%;--ty:50%;--tcolor:#4ADE80;--tdelay:1.6s;--tdur:6.0s">
+              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/notebooklm/4ADE80" alt="NotebookLM"></div>
+              <span class="tool-node__name">NotebookLM</span>
+            </div>
+            <div class="tool-node" style="--tx:82%;--ty:18%;--tcolor:#E879F9;--tdelay:2.3s;--tdur:5.2s">
+              <div class="tool-node__icon"><span class="tool-node__letter">XD</span></div>
+              <span class="tool-node__name">Adobe XD</span>
+            </div>
           </div>
         </div>
       </div>
