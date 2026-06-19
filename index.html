@@ -35,7 +35,7 @@
     --accent-lo: oklch(0.74 0.19 66 / 0.15);
     --accent-glow: oklch(0.74 0.19 66 / 0.28);
 
-    --maxw: 1180px;
+    --maxw: 1360px;
     --pad: clamp(22px, 5vw, 52px);
   }
 
@@ -187,26 +187,6 @@
     pointer-events: none; z-index: 0;
   }
 
-  .hero__rings {
-    position: absolute; top: 50%; right: -8%; transform: translateY(-50%);
-    pointer-events: none; z-index: 0;
-  }
-  .ring {
-    position: absolute; border-radius: 50%;
-    border: 1px solid oklch(0.74 0.19 66 / 0.13);
-    top: 0; left: 0; transform: translate(-50%, -50%);
-    animation: ring-pulse 7s ease-in-out infinite;
-  }
-  .ring--1 { width: 220px;  height: 220px; }
-  .ring--2 { width: 400px;  height: 400px; animation-delay: 1s; }
-  .ring--3 { width: 580px;  height: 580px; animation-delay: 2s; }
-  .ring--4 { width: 760px;  height: 760px; animation-delay: 3s; border-color: oklch(0.74 0.19 66 / 0.07); }
-  .ring--5 { width: 940px;  height: 940px; animation-delay: 4s; border-color: oklch(0.74 0.19 66 / 0.04); }
-  @keyframes ring-pulse {
-    0%, 100% { opacity: 0.9; }
-    50%       { opacity: 0.25; }
-  }
-
   .hero__inner { position: relative; z-index: 1; padding-top: clamp(72px, 10vw, 128px); padding-bottom: clamp(80px, 11vw, 140px); }
   .status {
     display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -231,64 +211,58 @@
   .hero__sub { max-width: 52ch; margin: clamp(22px, 3vw, 32px) 0 0; color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; text-wrap: pretty; }
   .hero__cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(30px, 4vw, 42px); }
 
-  /* Hero Tools Orbit */
-  .portrait { flex: 0 1 420px; min-width: 280px; position: relative; z-index: 1; }
-  .hero-tools {
+  /* Hero Stack Orbit (rotating rings, codelabdev-style) */
+  .portrait { flex: 0 1 540px; min-width: 320px; position: relative; z-index: 1; }
+  .stack-orbit {
     position: relative;
     width: 100%; aspect-ratio: 1;
-    max-width: 400px; margin: 0 auto;
+    max-width: 520px; margin: 0 auto;
   }
-  .tool-ring {
+  .stack-orbit__track {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     border-radius: 50%;
-    border: 1px solid oklch(0.95 0.005 80 / 0.07);
+    border: 1px solid oklch(0.95 0.005 80 / 0.08);
     pointer-events: none;
   }
-  .tool-ring--1 { width: 40%;  height: 40%; }
-  .tool-ring--2 { width: 68%;  height: 68%; }
-  .tool-ring--3 { width: 96%;  height: 96%; }
+  .stack-orbit__track--1 { width: 46%;  height: 46%; }
+  .stack-orbit__track--2 { width: 86%;  height: 86%; }
 
-  .tool-node {
-    position: absolute;
-    left: var(--tx); top: var(--ty);
-    transform: translate(-50%, -50%);
-    animation: tool-float var(--tdur, 6s) ease-in-out infinite alternate;
-    animation-delay: var(--tdelay, 0s);
-    cursor: default;
+  .stack-orbit__center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 100px; height: 100px; border-radius: 24px;
+    background: oklch(1 0 0);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 10px 32px -6px rgba(0,0,0,0.55);
+    z-index: 3;
   }
-  @keyframes tool-float {
-    from { transform: translate(-50%, -50%) translateY(0px); }
-    to   { transform: translate(-50%, -50%) translateY(-9px); }
+  .stack-orbit__center img { width: 54px; height: 54px; object-fit: contain; }
+
+  .stack-orbit__spin {
+    position: absolute; inset: 0;
+    animation: stack-spin-cw var(--spin, 38s) linear infinite;
   }
-  .tool-node__icon {
-    width: 54px; height: 54px; border-radius: 15px;
+  .stack-orbit__spin--ccw { animation-name: stack-spin-ccw; }
+  @keyframes stack-spin-cw  { to { transform: rotate(360deg); } }
+  @keyframes stack-spin-ccw { to { transform: rotate(-360deg); } }
+
+  .stack-icon {
+    position: absolute; top: 50%; left: 50%;
+    transform: rotate(var(--a)) translate(var(--r)) rotate(calc(-1 * var(--a)));
+  }
+  .stack-icon__box {
+    width: 62px; height: 62px; margin: -31px 0 0 -31px; border-radius: 16px;
     background: oklch(0.10 0.010 285);
     border: 1px solid oklch(0.95 0.005 80 / 0.10);
     display: flex; align-items: center; justify-content: center;
-    padding: 13px;
-    transition: transform .22s cubic-bezier(0.34,1.56,0.64,1), box-shadow .22s, border-color .22s;
-    box-shadow: 0 4px 18px -6px var(--tcolor, rgba(255,255,255,0.15));
+    padding: 11px;
+    box-shadow: 0 4px 16px -6px var(--tcolor, rgba(255,255,255,0.15));
+    animation: stack-spin-ccw var(--spin, 38s) linear infinite;
+    transition: transform .2s cubic-bezier(0.34,1.56,0.64,1), border-color .2s;
   }
-  .tool-node:hover .tool-node__icon {
-    transform: scale(1.18);
-    border-color: var(--tcolor, rgba(255,255,255,0.2));
-    box-shadow: 0 8px 28px -6px var(--tcolor, rgba(255,255,255,0.3));
-  }
-  .tool-node__icon img { width: 100%; height: 100%; object-fit: contain; display: block; }
-  .tool-node__letter {
-    font-family: var(--mono); font-size: 12px; font-weight: 700;
-    color: var(--tcolor);
-  }
-  .tool-node__name {
-    position: absolute; top: calc(100% + 6px); left: 50%;
-    transform: translateX(-50%);
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em;
-    color: var(--faint); white-space: nowrap;
-    opacity: 0; transition: opacity .16s;
-    pointer-events: none;
-  }
-  .tool-node:hover .tool-node__name { opacity: 1; }
+  .stack-icon--ccw .stack-icon__box { animation-name: stack-spin-cw; }
+  .stack-icon:hover .stack-icon__box { transform: scale(1.18); border-color: var(--tcolor, rgba(255,255,255,0.25)); }
+  .stack-icon__box img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
   /* =========================================================
      ABOUT
@@ -379,22 +353,180 @@
      PROCESS
      ========================================================= */
   .process h2 { margin-bottom: clamp(40px, 5vw, 60px); }
-  .steps {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
-    border: 0.5px solid var(--line); border-radius: 18px; overflow: hidden; background: var(--card);
+  .process-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
   }
-  .step {
-    position: relative; padding: clamp(26px, 3vw, 38px); border-right: 0.5px solid var(--line);
-    border-bottom: 0.5px solid var(--line); display: flex; flex-direction: column; gap: 16px;
-    min-height: 248px; transition: background .18s;
+  .process-card {
+    position: relative; border: 0.5px solid var(--line); border-radius: 20px;
+    background: var(--card); overflow: hidden;
+    display: grid; grid-template-columns: 1.05fr 1fr;
+    transition: border-color .2s, background .2s;
   }
-  .step:hover { background: oklch(0.12 0.012 285); }
-  .step--ai::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); }
-  .step__head { display: flex; align-items: flex-start; justify-content: space-between; }
-  .step__num { font-family: var(--mono); font-weight: 700; font-size: clamp(2.4rem, 3.2vw, 3.2rem); line-height: 0.9; letter-spacing: -0.02em; color: oklch(0.95 0.005 80 / 0.12); }
-  .step__badge { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 999px; padding: 4px 10px; margin-top: 6px; }
-  .step h3 { font-size: clamp(1.2rem, 1.8vw, 1.55rem); letter-spacing: -0.01em; color: var(--ink); }
-  .step p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; text-wrap: pretty; }
+  .process-card:hover { border-color: oklch(0.95 0.005 80 / 0.18); }
+  .process-card--ai::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--accent); box-shadow: 0 0 16px var(--accent-glow); z-index: 1;
+  }
+  .process-card__info { padding: clamp(24px, 2.6vw, 32px); display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .process-card__head { display: flex; align-items: center; gap: 10px; }
+  .process-card__num { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; color: var(--faint); }
+  .process-card__badge { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #fff; background: var(--accent); border-radius: 999px; padding: 3px 9px; }
+  .process-card h3 { font-size: clamp(1.2rem, 1.8vw, 1.5rem); letter-spacing: -0.01em; color: var(--ink); }
+  .process-card__desc { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; text-wrap: pretty; }
+  .process-card__list { display: flex; flex-direction: column; margin-top: 4px; }
+  .process-card__list li {
+    list-style: none; font-size: 13.5px; color: var(--muted);
+    padding: 11px 0; border-bottom: 0.5px solid var(--line);
+  }
+  .process-card__list li:last-child { border-bottom: none; }
+
+  .process-card__mockwrap { padding: clamp(18px, 2vw, 24px); border-left: 0.5px solid var(--line); display: flex; align-items: stretch; }
+  .process-card__mock {
+    flex: 1; border: 0.5px solid var(--line); border-radius: 14px;
+    background: oklch(0.07 0.01 285); padding: 16px;
+    display: flex; flex-direction: column; gap: 16px; min-width: 0;
+  }
+  .mock__bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .mock__dots { display: flex; gap: 4px; }
+  .mock__dots span { width: 5px; height: 5px; border-radius: 999px; background: var(--faint); opacity: .5; }
+  .mock__label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 6px; }
+  .mock__status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .mock__statusdot { width: 6px; height: 6px; border-radius: 999px; background: oklch(0.72 0.18 148); animation: pulse 2.2s ease-in-out infinite; }
+  .mock__statusdot--gold { background: var(--accent); }
+
+  /* mock: intake chat */
+  .mock__chat { display: flex; flex-direction: column; gap: 12px; flex: 1; justify-content: center; }
+  .mock__chatrow { display: flex; align-items: center; gap: 10px; }
+  .mock__avatar {
+    width: 30px; height: 30px; border-radius: 999px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent), oklch(0.6 0.18 30));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 700; color: #fff;
+  }
+  .mock__chatname { font-size: 13px; color: var(--ink); line-height: 1.3; }
+  .mock__chatrole { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); }
+  .mock__typing { display: flex; align-items: center; gap: 8px; padding-left: 40px; }
+  .mock__typingdots { display: flex; gap: 3px; }
+  .mock__typingdots span { width: 5px; height: 5px; border-radius: 999px; background: var(--accent); animation: typing-bounce 1.1s ease-in-out infinite; }
+  .mock__typingdots span:nth-child(2) { animation-delay: .15s; }
+  .mock__typingdots span:nth-child(3) { animation-delay: .3s; }
+  .mock__typingtext { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  @keyframes typing-bounce { 0%,60%,100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-3px); opacity: 1; } }
+
+  /* mock: style inspector */
+  .mock__style { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; }
+  .mock__type {
+    position: relative; display: flex; align-items: center; justify-content: center;
+    width: clamp(78px, 46%, 118px); height: clamp(78px, 46%, 118px);
+    background: #15151c; border: 2px solid #6c63ff; border-radius: 4px;
+  }
+  .mock__type strong { font-size: clamp(26px, 9vw, 38px); font-weight: 500; color: #fff; line-height: 1; }
+  .mock__tag {
+    position: absolute; top: -22px; left: -2px;
+    font-family: var(--mono); font-size: 9px; color: #fff; background: #6c63ff;
+    border-radius: 4px; padding: 3px 8px; white-space: nowrap;
+  }
+  .mock__handle { position: absolute; width: 9px; height: 9px; background: #fff; border: 2px solid #6c63ff; border-radius: 50%; }
+  .mock__handle--tl { top: -5px; left: -5px; }
+  .mock__handle--tr { top: -5px; right: -5px; }
+  .mock__handle--bl { bottom: -5px; left: -5px; }
+  .mock__handle--br { bottom: -5px; right: -5px; }
+
+  /* mock: design — multiplayer cursors + review state */
+  .mock__cursor { position: absolute; left: 13%; top: 75%; z-index: 4; opacity: 0; pointer-events: none; will-change: left, top, opacity; }
+  .mock__cursor svg { width: 16px; height: 16px; display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,.5)); }
+  .mock__cursorlabel { position: absolute; top: 13px; left: 11px; font-family: var(--mono); font-size: 9px; color: #fff; padding: 2px 7px; border-radius: 5px; white-space: nowrap; }
+  .mock__cursor--designer svg { fill: #d4537e; }
+  .mock__cursor--designer .mock__cursorlabel { background: #d4537e; }
+  .mock__cursor--client svg { fill: #378add; }
+  .mock__cursor--client .mock__cursorlabel { background: #378add; }
+  .mock__approved {
+    position: absolute; bottom: 4px; right: 4px; z-index: 4;
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--mono); font-size: 9px; color: #fff;
+    background: oklch(0.6 0.15 148); border-radius: 999px; padding: 4px 9px;
+    opacity: 0; transform: translateY(6px);
+  }
+  .mock__approved .dot { width: 5px; height: 5px; border-radius: 999px; background: oklch(0.9 0.1 148); }
+
+  .mock__style.is-playing .mock__cursor--designer { opacity: 1; animation: design-cursor-designer 6s ease-in-out infinite; }
+  .mock__style.is-playing .mock__cursor--client { animation: design-cursor-client 6s ease-in-out infinite; }
+  .mock__style.is-playing .mock__approved { animation: design-approved 6s ease-in-out infinite; }
+
+  @keyframes design-cursor-designer {
+    0%        { left: 13%; top: 75%; }
+    30%, 55%  { left: 47%; top: 45%; }
+    100%      { left: 13%; top: 75%; }
+  }
+  @keyframes design-cursor-client {
+    0%, 40%  { left: 83%; top: 21%; opacity: 0; }
+    70%      { left: 65%; top: 29%; opacity: 1; }
+    100%     { left: 83%; top: 21%; opacity: 0; }
+  }
+  @keyframes design-approved {
+    0%, 55%   { opacity: 0; transform: translateY(6px); }
+    70%, 95%  { opacity: 1; transform: translateY(0); }
+    100%      { opacity: 0; transform: translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html:not(.force-motion) .mock__style.is-playing .mock__cursor--designer,
+    html:not(.force-motion) .mock__style.is-playing .mock__cursor--client,
+    html:not(.force-motion) .mock__style.is-playing .mock__approved { animation: none; }
+    html:not(.force-motion) .mock__style.is-playing .mock__cursor--designer { opacity: 1; left: 13%; top: 75%; }
+    html:not(.force-motion) .mock__style.is-playing .mock__cursor--client { opacity: 1; left: 65%; top: 29%; }
+    html:not(.force-motion) .mock__style.is-playing .mock__approved { opacity: 1; transform: translateY(0); }
+  }
+
+  /* mock: build — sliding code editor reveal */
+  .mock__build { position: relative; flex: 1; overflow: hidden; }
+  .mock__editor {
+    position: absolute; top: 6%; right: -60px; width: 92%; height: 88%;
+    background: #0f0f14; border: 1px solid #2a2a33; border-radius: 14px 0 0 14px;
+    box-shadow: 0 0 0 6px #16161c;
+    display: flex; flex-direction: column; overflow: hidden;
+    opacity: 0; transform: translateX(28px);
+  }
+  .mock__editorbar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-bottom: 1px solid #2a2a33; flex-shrink: 0; }
+  .mock__traffic { display: flex; gap: 5px; }
+  .mock__traffic span { width: 7px; height: 7px; border-radius: 50%; }
+  .mock__traffic span:nth-child(1) { background: #ff5f57; }
+  .mock__traffic span:nth-child(2) { background: #febc2e; }
+  .mock__traffic span:nth-child(3) { background: #28c840; }
+  .mock__filename { font-family: var(--mono); font-size: 9px; color: var(--faint); }
+  .mock__code { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+  .mock__codeline { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; opacity: 0; transform: translateX(-8px); }
+  .mock__codeline--comment { color: var(--faint); font-style: italic; }
+  .mock__caret { display: inline-block; color: var(--accent); opacity: 0; }
+
+  /* one-shot typewriter reveal — plays once when scrolled into view, then holds */
+  .mock__build.is-playing .mock__editor { animation: editor-reveal 0.6s ease-out forwards; }
+  .mock__build.is-playing .mock__codeline { animation: codeline-in 0.3s ease-out forwards; }
+  .mock__build.is-playing .mock__codeline:nth-child(1) { animation-delay: .30s; }
+  .mock__build.is-playing .mock__codeline:nth-child(2) { animation-delay: .45s; }
+  .mock__build.is-playing .mock__codeline:nth-child(3) { animation-delay: .60s; }
+  .mock__build.is-playing .mock__codeline:nth-child(4) { animation-delay: .75s; }
+  .mock__build.is-playing .mock__codeline:nth-child(5) { animation-delay: .90s; }
+  .mock__build.is-playing .mock__codeline:nth-child(6) { animation-delay: 1.05s; }
+  .mock__build.is-playing .mock__codeline:nth-child(7) { animation-delay: 1.20s; }
+  /* caret stays hidden until the last line has finished typing, then blinks forever */
+  .mock__build.is-playing .mock__caret { animation: caret-blink 0.8s ease-in-out 1.5s infinite alternate; }
+
+  @keyframes editor-reveal { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes codeline-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes caret-blink { from { opacity: 1; } to { opacity: .15; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    html:not(.force-motion) .mock__build.is-playing .mock__editor,
+    html:not(.force-motion) .mock__build.is-playing .mock__codeline,
+    html:not(.force-motion) .mock__build.is-playing .mock__caret { animation: none; opacity: 1; transform: translateX(0); }
+  }
+
+  /* mock: sync avatars */
+  .mock__sync { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+  .mock__stack { display: flex; }
+  .mock__stack .mock__avatar { border: 2px solid oklch(0.07 0.01 285); margin-left: -10px; }
+  .mock__stack .mock__avatar:first-child { margin-left: 0; }
+  .mock__synctext { font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; color: var(--faint); display: flex; align-items: center; gap: 6px; }
 
   /* =========================================================
      CTA  (deep dark block)
@@ -454,10 +586,15 @@
     .nav__right .btn--solid.btn--sm { display: none; }
     .hamburger { display: flex; }
   }
+  @media (max-width: 900px) {
+    .process-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    .process-card { grid-template-columns: 1fr; }
+    .process-card__mockwrap { border-left: none; border-top: 0.5px solid var(--line); }
+  }
   @media (max-width: 520px) {
     .stats { grid-template-columns: 1fr; }
-    .steps { grid-template-columns: 1fr; }
-    .step { border-right: none; }
   }
 
   /* =========================================================
@@ -525,8 +662,8 @@
   <!-- ============================ MOBILE MENU ============================ -->
   <div class="mobile-menu" id="mobile-menu">
     <button class="mobile-close" id="mobile-close" aria-label="Close">✕</button>
-    <a href="#work"    data-i18n="navWork"    data-close>Work</a>
     <a href="#about"   data-i18n="navAbout"   data-close>About</a>
+    <a href="#work"    data-i18n="navWork"    data-close>Work</a>
     <a href="#process" data-i18n="navProcess" data-close>Process</a>
     <a href="#contact" class="btn btn--solid"  data-i18n="navTalk" data-close>Let's talk</a>
   </div>
@@ -540,8 +677,8 @@
       </a>
       <!-- Centered pill -->
       <div class="nav__pill">
-        <a href="#work"    data-i18n="navWork">Work</a>
         <a href="#about"   data-i18n="navAbout">About</a>
+        <a href="#work"    data-i18n="navWork">Work</a>
         <a href="#process" data-i18n="navProcess">Process</a>
       </div>
       <div class="nav__right">
@@ -566,14 +703,6 @@
   <section id="top" class="hero">
     <!-- Particle canvas -->
     <canvas class="hero__canvas" id="hero-canvas" aria-hidden="true"></canvas>
-    <!-- Radar rings -->
-    <div class="hero__rings" aria-hidden="true">
-      <div class="ring ring--1"></div>
-      <div class="ring ring--2"></div>
-      <div class="ring ring--3"></div>
-      <div class="ring ring--4"></div>
-      <div class="ring ring--5"></div>
-    </div>
     <div class="hero__inner wrap">
       <div class="status" data-animate>
         <span class="status__dot"></span>
@@ -595,49 +724,44 @@
           </div>
         </div>
         <div class="portrait" data-animate style="transition-delay:0.22s">
-          <div class="hero-tools" aria-hidden="true">
-            <!-- Rings -->
-            <div class="tool-ring tool-ring--1"></div>
-            <div class="tool-ring tool-ring--2"></div>
-            <div class="tool-ring tool-ring--3"></div>
-            <!-- Ring 1 icons (r≈20%) -->
-            <div class="tool-node" style="--tx:50%;--ty:30%;--tcolor:#A259FF;--tdelay:0s;--tdur:5.8s">
-              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/figma/A259FF" alt="Figma"></div>
-              <span class="tool-node__name">Figma</span>
+          <div class="stack-orbit" aria-hidden="true">
+            <div class="stack-orbit__track stack-orbit__track--1"></div>
+            <div class="stack-orbit__track stack-orbit__track--2"></div>
+            <div class="stack-orbit__center"><img src="/assets/favicon.svg" alt=""></div>
+
+            <!-- Inner ring: 4 icons, spins clockwise -->
+            <div class="stack-orbit__spin" style="--spin:34s">
+              <div class="stack-icon" style="--a:0deg;--r:120px;--tcolor:#A259FF">
+                <div class="stack-icon__box"><img src="/assets/tools/figma.svg" alt="Figma"></div>
+              </div>
+              <div class="stack-icon" style="--a:90deg;--r:120px;--tcolor:#D97757">
+                <div class="stack-icon__box"><img src="/assets/tools/claude-ai.svg" alt="Claude AI"></div>
+              </div>
+              <div class="stack-icon" style="--a:180deg;--r:120px;--tcolor:#FFFFFF">
+                <div class="stack-icon__box"><img src="/assets/tools/windsurf.svg" alt="Windsurf"></div>
+              </div>
+              <div class="stack-icon" style="--a:270deg;--r:120px;--tcolor:#FFFFFF">
+                <div class="stack-icon__box"><img src="/assets/tools/framer.svg" alt="Framer"></div>
+              </div>
             </div>
-            <div class="tool-node" style="--tx:38%;--ty:69%;--tcolor:#E07820;--tdelay:0.7s;--tdur:6.4s">
-              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/anthropic/E07820" alt="Claude AI"></div>
-              <span class="tool-node__name">Claude AI</span>
-            </div>
-            <div class="tool-node" style="--tx:62%;--ty:69%;--tcolor:#F472B6;--tdelay:1.4s;--tdur:5.4s">
-              <div class="tool-node__icon"><span class="tool-node__letter">Lv</span></div>
-              <span class="tool-node__name">Lovable</span>
-            </div>
-            <!-- Ring 2 icons (r≈34%) -->
-            <div class="tool-node" style="--tx:84%;--ty:50%;--tcolor:#22D3EE;--tdelay:0.4s;--tdur:7.0s">
-              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/windsurf/22D3EE" alt="Windsurf"></div>
-              <span class="tool-node__name">Windsurf</span>
-            </div>
-            <div class="tool-node" style="--tx:32%;--ty:81%;--tcolor:#60A5FA;--tdelay:1.1s;--tdur:6.2s">
-              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/framer/60A5FA" alt="Framer"></div>
-              <span class="tool-node__name">Framer</span>
-            </div>
-            <div class="tool-node" style="--tx:32%;--ty:19%;--tcolor:#818CF8;--tdelay:1.8s;--tdur:5.6s">
-              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/googlegemini/818CF8" alt="Gemini"></div>
-              <span class="tool-node__name">Gemini Pro</span>
-            </div>
-            <!-- Ring 3 icons (r≈46%) -->
-            <div class="tool-node" style="--tx:82%;--ty:82%;--tcolor:#FB923C;--tdelay:0.9s;--tdur:6.8s">
-              <div class="tool-node__icon"><span class="tool-node__letter">Ai</span></div>
-              <span class="tool-node__name">Illustrator</span>
-            </div>
-            <div class="tool-node" style="--tx:6%;--ty:50%;--tcolor:#4ADE80;--tdelay:1.6s;--tdur:6.0s">
-              <div class="tool-node__icon"><img src="https://cdn.simpleicons.org/notebooklm/4ADE80" alt="NotebookLM"></div>
-              <span class="tool-node__name">NotebookLM</span>
-            </div>
-            <div class="tool-node" style="--tx:82%;--ty:18%;--tcolor:#E879F9;--tdelay:2.3s;--tdur:5.2s">
-              <div class="tool-node__icon"><span class="tool-node__letter">XD</span></div>
-              <span class="tool-node__name">Adobe XD</span>
+
+            <!-- Outer ring: 5 icons, spins counter-clockwise -->
+            <div class="stack-orbit__spin stack-orbit__spin--ccw" style="--spin:50s">
+              <div class="stack-icon stack-icon--ccw" style="--a:18deg;--r:224px;--tcolor:#3186FF">
+                <div class="stack-icon__box"><img src="/assets/tools/gemini.svg" alt="Gemini"></div>
+              </div>
+              <div class="stack-icon stack-icon--ccw" style="--a:90deg;--r:224px;--tcolor:#FFFFFF">
+                <div class="stack-icon__box"><img src="/assets/tools/notebooklm.svg" alt="NotebookLM"></div>
+              </div>
+              <div class="stack-icon stack-icon--ccw" style="--a:162deg;--r:224px;--tcolor:#FF66F4">
+                <div class="stack-icon__box"><img src="/assets/tools/lovable.svg" alt="Lovable"></div>
+              </div>
+              <div class="stack-icon stack-icon--ccw" style="--a:234deg;--r:224px;--tcolor:#D97757">
+                <div class="stack-icon__box"><img src="/assets/tools/claude-code.svg" alt="Claude Code"></div>
+              </div>
+              <div class="stack-icon stack-icon--ccw" style="--a:306deg;--r:224px;--tcolor:#EB1000">
+                <div class="stack-icon__box"><img src="/assets/tools/adobe-xd.svg" alt="Adobe XD"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -695,7 +819,7 @@
     <div class="section__inner wrap process">
       <div class="eyebrow" data-animate><span class="num">04</span><span class="rule"></span><span data-i18n="processLabel">Process</span></div>
       <h2 class="h-section" data-animate style="transition-delay:0.08s" data-i18n="processHeading">How the work happens.</h2>
-      <div class="steps" id="steps"></div>
+      <div class="process-grid" id="steps"></div>
     </div>
   </section>
 
@@ -789,22 +913,26 @@
       work: [
         { num: '01', name: 'TCG Thailand — E-commerce Platform', role: 'UX/UI Designer', impact: 'Multi-role platform',
           desc: 'Designed end-to-end UX/UI for a multi-role e-commerce platform — customers, merchants, and admins. Covered product search, filters, reviews, and checkout, and delivered a component-based design system with tokens ready for dev handoff.',
-          tags: ['UX/UI Design', 'Design System', 'E-commerce'], url: 'https://gold-portfolio.framer.ai', img: '/assets/work/tcg-thailand.jpg' },
+          tags: ['UX/UI Design', 'Design System', 'E-commerce'], url: '/case-studies/tcg-thailand.html', img: '/assets/work/tcg-thailand.jpg' },
         { num: '02', name: 'Fan Delivery — Food Delivery App', role: 'UX/UI Designer', impact: 'Web & Mobile',
           desc: 'Designed the full UX/UI for a food delivery app across web and mobile. Mapped user journeys, built wireframes, and ran feasibility reviews with the dev team before moving to high-fidelity.',
-          tags: ['Wireframing', 'User Journey', 'Responsive Design'], url: 'https://gold-portfolio.framer.ai', img: '/assets/work/fan-delivery.jpg' },
+          tags: ['Wireframing', 'User Journey', 'Responsive Design'], url: '/case-studies/fan-delivery.html', img: '/assets/work/fan-delivery.jpg' },
         { num: '03', name: 'BMA บ่นบ่น — Mental Wellness Platform', role: 'UX/UI Designer', impact: 'Emotional support UX',
           desc: 'Designed a mental wellness platform centered on emotional support and community. Prioritized accessible, warm, and trustworthy UI to build confidence in a sensitive context.',
-          tags: ['UX Design', 'Accessibility', 'Web Platform'], url: 'https://gold-portfolio.framer.ai', img: '/assets/work/bma-bonbon.jpg' },
+          tags: ['UX Design', 'Accessibility', 'Web Platform'], url: '/case-studies/bma-bonbon.html', img: '/assets/work/bma-bonbon.jpg' },
         { num: '04', name: 'KMW Report — Financial Dashboard', role: 'UX/UI Designer', impact: 'Data-driven UI',
           desc: 'Designed a financial dashboard for tracking transactions and inventory. Focused on data clarity, visualization hierarchy, and a responsive layout that works across devices.',
-          tags: ['Dashboard UI', 'Data Visualization', 'Responsive Layout'], url: 'https://gold-portfolio.framer.ai', img: null },
+          tags: ['Dashboard UI', 'Data Visualization', 'Responsive Layout'], url: '/case-studies/kmw-report.html', img: null },
       ],
       steps: [
-        { n: '01', title: 'Discover', body: 'I start by reading the brief — stakeholder requirements, user research, or existing data — then map journeys to surface what actually matters before touching Figma.' },
-        { n: '02', title: 'Design', body: 'Wireframes to high-fidelity UI in Figma, with a component library and design tokens built for dev handoff from day one. Every layout is responsive by default.' },
-        { n: '03', title: 'Build with AI', body: 'I prototype and ship responsive pages using Lovable and Windsurf, with Claude bridging design decisions to production code — cutting the gap between design and build.', ai: true },
-        { n: '04', title: 'Collaborate', body: 'I stay in sync with dev and data teams throughout — feasibility checks, design reviews, and iterating until it ships right and feels right.' },
+        { n: '01', title: 'Discover', desc: 'Reading the brief and the people behind it before touching Figma.',
+          items: ['Stakeholder Interviews', 'User Research', 'Journey Mapping', 'Requirement Docs'], mock: 'intake' },
+        { n: '02', title: 'Design', desc: 'Wireframes to high-fidelity UI, built for dev handoff from day one.',
+          items: ['Wireframing', 'Component Library', 'Design Tokens', 'High-fidelity UI'], mock: 'style' },
+        { n: '03', title: 'Build with AI', desc: 'Claude bridges design decisions to production code.',
+          items: ['Claude Code Gen', 'Windsurf Prototyping', 'Lovable Deploy', 'QA Pass'], mock: 'build', ai: true },
+        { n: '04', title: 'Collaborate', desc: 'Staying in sync with dev and data teams until it ships right.',
+          items: ['Design Reviews', 'Feasibility Checks', 'Dev Handoff', 'Iteration'], mock: 'sync' },
       ],
     },
     th: {
@@ -860,22 +988,26 @@
       work: [
         { num: '01', name: 'TCG Thailand — E-commerce Platform', role: 'UX/UI Designer', impact: 'Multi-role platform',
           desc: 'ออกแบบ UX/UI ครบวงจรสำหรับแพลตฟอร์ม e-commerce แบบ multi-role — ลูกค้า ร้านค้า และแอดมิน ครอบคลุม product search, filters, reviews และ checkout พร้อม design system แบบ component-based พร้อม tokens สำหรับ dev handoff',
-          tags: ['UX/UI Design', 'Design System', 'E-commerce'], url: 'https://gold-portfolio.framer.ai', img: '/assets/work/tcg-thailand.jpg' },
+          tags: ['UX/UI Design', 'Design System', 'E-commerce'], url: '/case-studies/tcg-thailand.html', img: '/assets/work/tcg-thailand.jpg' },
         { num: '02', name: 'Fan Delivery — แอปสั่งอาหาร', role: 'UX/UI Designer', impact: 'Web & Mobile',
           desc: 'ออกแบบ UX/UI ครบวงจรสำหรับแอปสั่งอาหาร ทั้ง web และ mobile วาด user journey สร้าง wireframe และ review feasibility กับทีม dev ก่อน move ไป high-fidelity',
-          tags: ['Wireframing', 'User Journey', 'Responsive Design'], url: 'https://gold-portfolio.framer.ai', img: '/assets/work/fan-delivery.jpg' },
+          tags: ['Wireframing', 'User Journey', 'Responsive Design'], url: '/case-studies/fan-delivery.html', img: '/assets/work/fan-delivery.jpg' },
         { num: '03', name: 'BMA บ่นบ่น — แพลตฟอร์มสุขภาพจิต', role: 'UX/UI Designer', impact: 'Emotional Support UX',
           desc: 'ออกแบบแพลตฟอร์มสุขภาพจิตที่มุ่งเน้น emotional support และชุมชน ให้ความสำคัญกับ UI ที่เข้าถึงง่าย อบอุ่น และน่าไว้วางใจ — เพราะ context ที่ sensitive ต้องการ design ที่ระมัดระวัง',
-          tags: ['UX Design', 'Accessibility', 'Web Platform'], url: 'https://gold-portfolio.framer.ai', img: '/assets/work/bma-bonbon.jpg' },
+          tags: ['UX Design', 'Accessibility', 'Web Platform'], url: '/case-studies/bma-bonbon.html', img: '/assets/work/bma-bonbon.jpg' },
         { num: '04', name: 'KMW Report — Financial Dashboard', role: 'UX/UI Designer', impact: 'Data-driven UI',
           desc: 'ออกแบบ dashboard การเงินสำหรับติดตามธุรกรรมและสินค้าคงคลัง เน้น data clarity, hierarchy การแสดงผล และ responsive layout ที่ใช้งานได้ทุกอุปกรณ์',
-          tags: ['Dashboard UI', 'Data Visualization', 'Responsive Layout'], url: 'https://gold-portfolio.framer.ai', img: null },
+          tags: ['Dashboard UI', 'Data Visualization', 'Responsive Layout'], url: '/case-studies/kmw-report.html', img: null },
       ],
       steps: [
-        { n: '01', title: 'ทำความเข้าใจ', body: 'เริ่มต้นด้วยการอ่าน brief — ความต้องการของ stakeholder, ข้อมูลผู้ใช้ หรือข้อมูลที่มีอยู่ — แล้ววาด user journey เพื่อค้นหาสิ่งที่สำคัญจริงๆ ก่อนเปิด Figma' },
-        { n: '02', title: 'ออกแบบ', body: 'จาก wireframe สู่ UI ความละเอียดสูงใน Figma พร้อม component library และ design tokens ที่สร้างมาเพื่อ dev handoff ตั้งแต่วันแรก ทุก layout รองรับ responsive โดย default' },
-        { n: '03', title: 'สร้างด้วย AI', body: 'ผม prototype และ deploy หน้าเว็บ responsive ด้วย Lovable และ Windsurf โดยมี Claude ช่วยเชื่อม design decision กับ production code — ลดช่องว่างระหว่าง design กับ build', ai: true },
-        { n: '04', title: 'ทำงานร่วมกัน', body: 'ผม sync กับทีม dev และ data ตลอดโปรเจกต์ — ตรวจ feasibility, review design และ iterate จนกว่างานจะ ship ได้และรู้สึกถูกต้อง' },
+        { n: '01', title: 'ทำความเข้าใจ', desc: 'อ่าน brief และเข้าใจคนที่อยู่เบื้องหลังก่อนเปิด Figma',
+          items: ['สัมภาษณ์ Stakeholder', 'User Research', 'Journey Mapping', 'Requirement Docs'], mock: 'intake' },
+        { n: '02', title: 'ออกแบบ', desc: 'จาก wireframe สู่ UI ความละเอียดสูง พร้อม dev handoff ตั้งแต่วันแรก',
+          items: ['Wireframing', 'Component Library', 'Design Tokens', 'High-fidelity UI'], mock: 'style' },
+        { n: '03', title: 'สร้างด้วย AI', desc: 'Claude ช่วยเชื่อม design decision กับ production code',
+          items: ['Claude Code Gen', 'Windsurf Prototyping', 'Lovable Deploy', 'QA Pass'], mock: 'build', ai: true },
+        { n: '04', title: 'ทำงานร่วมกัน', desc: 'sync กับทีม dev และ data จนกว่างานจะ ship ได้และรู้สึกถูกต้อง',
+          items: ['Design Reviews', 'Feasibility Checks', 'Dev Handoff', 'Iteration'], mock: 'sync' },
       ],
     },
   };
@@ -910,8 +1042,10 @@
       `<span class="pill${s.key ? ' pill--key' : ''}">${s.name}</span>`).join('');
   }
   function renderWork(t) {
-    document.getElementById('work-grid').innerHTML = t.work.map((p, i) => `
-      <a class="card" data-animate style="transition-delay:${i * 0.1}s" href="${p.url}" target="_blank" rel="noopener" aria-label="${p.name}">
+    document.getElementById('work-grid').innerHTML = t.work.map((p, i) => {
+      const linkAttrs = /^https?:\/\//.test(p.url) ? 'target="_blank" rel="noopener"' : '';
+      return `
+      <a class="card" data-animate style="transition-delay:${i * 0.1}s" href="${p.url}" ${linkAttrs} aria-label="${p.name}">
         <div class="card__media">
           ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : ''}
           <span class="card__year">${p.num}</span>
@@ -924,22 +1058,132 @@
           <div class="card__tags">${p.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
           <span class="card__cta">${t.workCta} <span class="arrow">→</span></span>
         </div>
-      </a>`).join('');
+      </a>`;
+    }).join('');
   }
+  const PROCESS_MOCKS = {
+    intake: {
+      label: 'INTAKE',
+      status: '<span class="mock__statusdot"></span>online',
+      html: `
+        <div class="mock__chat">
+          <div class="mock__chatrow">
+            <span class="mock__avatar">SH</span>
+            <div>
+              <div class="mock__chatname">Stakeholder</div>
+              <div class="mock__chatrole">Brief</div>
+            </div>
+          </div>
+          <div class="mock__typing">
+            <span class="mock__typingdots"><span></span><span></span><span></span></span>
+            <span class="mock__typingtext">typing requirements…</span>
+          </div>
+        </div>`
+    },
+    style: {
+      label: 'STYLE',
+      status: '16:9 · 100%',
+      html: `
+        <div class="mock__style">
+          <div class="mock__type">
+            <span class="mock__tag">Heading · 48px</span>
+            <strong>Aa</strong>
+            <span class="mock__handle mock__handle--tl"></span>
+            <span class="mock__handle mock__handle--tr"></span>
+            <span class="mock__handle mock__handle--bl"></span>
+            <span class="mock__handle mock__handle--br"></span>
+          </div>
+          <span class="mock__cursor mock__cursor--designer" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 2l7 18 2.5-7.5L20 10z"/></svg>
+            <span class="mock__cursorlabel">Designer</span>
+          </span>
+          <span class="mock__cursor mock__cursor--client" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 2l7 18 2.5-7.5L20 10z"/></svg>
+            <span class="mock__cursorlabel">Client</span>
+          </span>
+          <span class="mock__approved" aria-hidden="true"><span class="dot"></span>Approved</span>
+        </div>`
+    },
+    build: {
+      label: 'DEPLOY',
+      status: '<span class="mock__statusdot mock__statusdot--gold"></span>building',
+      html: `
+        <div class="mock__build">
+          <div class="mock__editor">
+            <div class="mock__editorbar">
+              <span class="mock__traffic"><span></span><span></span><span></span></span>
+              <span class="mock__filename">Navbar.tsx</span>
+            </div>
+            <div class="mock__code">
+              <div class="mock__codeline" style="padding-left:0px">export const Navbar = () =&gt; {</div>
+              <div class="mock__codeline" style="padding-left:14px">const [open, setOpen] = useState(false)</div>
+              <div class="mock__codeline" style="padding-left:14px">const ref = useRef&lt;HTMLDivElement&gt;()</div>
+              <div class="mock__codeline" style="padding-left:14px">useEffect(() =&gt; {</div>
+              <div class="mock__codeline mock__codeline--comment" style="padding-left:28px">// TODO: handle scroll</div>
+              <div class="mock__codeline" style="padding-left:14px">}, [])</div>
+              <div class="mock__codeline" style="padding-left:0px">}<span class="mock__caret">▍</span></div>
+            </div>
+          </div>
+        </div>`
+    },
+    sync: {
+      label: 'REVIEW',
+      status: '<span class="mock__statusdot"></span>in sync',
+      html: `
+        <div class="mock__sync">
+          <div class="mock__stack">
+            <span class="mock__avatar">UX</span>
+            <span class="mock__avatar">DEV</span>
+            <span class="mock__avatar">PM</span>
+          </div>
+          <div class="mock__synctext">✓ all teams aligned</div>
+        </div>`
+    },
+  };
   function renderSteps(t) {
-    document.getElementById('steps').innerHTML = t.steps.map((s, i) => `
-      <div class="step${s.ai ? ' step--ai' : ''}" data-animate style="transition-delay:${i * 0.1}s">
-        <div class="step__head">
-          <span class="step__num">${s.n}</span>
-          ${s.ai ? '<span class="step__badge">AI</span>' : ''}
+    document.getElementById('steps').innerHTML = t.steps.map((s, i) => {
+      const m = PROCESS_MOCKS[s.mock];
+      return `
+      <div class="process-card${s.ai ? ' process-card--ai' : ''}" data-animate style="transition-delay:${i * 0.1}s">
+        <div class="process-card__info">
+          <div class="process-card__head">
+            <span class="process-card__num">${s.n}</span>
+            ${s.ai ? '<span class="process-card__badge">AI</span>' : ''}
+          </div>
+          <h3>${s.title}</h3>
+          <p class="process-card__desc">${s.desc}</p>
+          <ul class="process-card__list">${s.items.map(it => `<li>${it}</li>`).join('')}</ul>
         </div>
-        <h3>${s.title}</h3>
-        <p>${s.body}</p>
-      </div>`).join('');
+        <div class="process-card__mockwrap">
+          <div class="process-card__mock">
+            <div class="mock__bar">
+              <span class="mock__dots"><span></span><span></span><span></span></span>
+              <span class="mock__label">${m.label}</span>
+              <span class="mock__status">${m.status}</span>
+            </div>
+            ${m.html}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    observeDesignMock();
+  }
+
+  const designMockObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-playing');
+        designMockObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  function observeDesignMock() {
+    document.querySelectorAll('.mock__style, .mock__build').forEach(el => designMockObserver.observe(el));
   }
 
   function applyLang(next) {
     lang = next;
+    localStorage.setItem('lang', lang);
     const t = I18N[lang];
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -979,8 +1223,13 @@
   mobileMenu.querySelectorAll('[data-close]').forEach(a =>
     a.addEventListener('click', () => mobileMenu.classList.remove('open')));
 
+  /* Debug: ?motion=force overrides prefers-reduced-motion for QA/preview only */
+  if (new URLSearchParams(location.search).get('motion') === 'force') {
+    document.documentElement.classList.add('force-motion');
+  }
+
   renderMarquee();
-  applyLang('en');
+  applyLang(localStorage.getItem('lang') === 'th' ? 'th' : 'en');
 
   /* =========================================================
      SCROLL ANIMATION — IntersectionObserver
