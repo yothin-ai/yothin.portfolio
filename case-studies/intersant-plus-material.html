@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Intersant Plus Material — Case Study · Yothin Buaphian</title>
+<meta name="description" content="UX/UI case study: Intersant Plus Material, a landing page for an aluminum installation company." />
+
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+<link rel="apple-touch-icon" href="/assets/favicon.svg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --sans: 'Space Grotesk', 'IBM Plex Sans Thai', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', 'IBM Plex Sans Thai', monospace;
+
+    --bg:        oklch(0.15 0 0);
+    --panel:     oklch(0.09 0.010 285);
+    --card:      oklch(0.10 0.010 285);
+    --ink:       oklch(1.0 0 0);
+    --muted:     oklch(0.72 0.006 80);
+    --faint:     oklch(0.48 0.006 80);
+    --line:      oklch(0.95 0.005 80 / 0.09);
+    --line-soft: oklch(0.95 0.005 80 / 0.05);
+    --accent:    oklch(0.74 0.19 66);
+    --accent-lo: oklch(0.74 0.19 66 / 0.15);
+    --accent-glow: oklch(0.74 0.19 66 / 0.28);
+
+    --maxw: 980px;
+    --pad: clamp(22px, 5vw, 52px);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: var(--sans); background: var(--bg); color: var(--ink);
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
+
+  /* Top bar */
+  .topbar { border-bottom: 0.5px solid var(--line); }
+  .topbar__inner { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+  .logo { display: flex; align-items: center; gap: 9px; font-family: var(--mono); font-size: 15px; font-weight: 600; }
+  .logo__dot { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.01em;
+    padding: 10px 18px; border-radius: 999px; border: 0.5px solid var(--line);
+    transition: border-color .18s, color .18s, background .18s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn .arrow { font-family: var(--mono); }
+
+  /* Language toggle */
+  .lang { display: flex; align-items: center; gap: 2px; border: 0.5px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button {
+    padding: 5px 11px; border: none; border-radius: 999px; cursor: pointer;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em;
+    background: transparent; color: var(--faint); transition: background .18s, color .18s;
+  }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .topbar__right { display: flex; align-items: center; gap: 12px; }
+
+  /* Header */
+  .case-head { padding: clamp(48px, 8vw, 88px) 0 clamp(32px, 5vw, 48px); }
+  .case-head__back { margin-bottom: clamp(28px, 4vw, 44px); }
+  .case-head__meta { font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--accent); margin-bottom: 14px; }
+  .case-head h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1.05; }
+  .case-head__lead { max-width: 56ch; margin: clamp(16px, 2.4vw, 22px) 0 0; color: var(--muted); font-size: clamp(16px, 1.4vw, 18px); line-height: 1.65; }
+
+  /* Cover image */
+  .case-cover {
+    border-radius: 18px; overflow: hidden; border: 0.5px solid var(--line);
+    margin: clamp(32px, 5vw, 56px) 0;
+    box-shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .case-cover img { width: 100%; display: block; }
+
+  /* Gallery */
+  .case-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: clamp(56px, 8vw, 88px); }
+  .case-gallery__item { border-radius: 14px; overflow: hidden; border: 0.5px solid var(--line); background: var(--card); aspect-ratio: 4/3; }
+  .case-gallery__item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @media (max-width: 720px) { .case-gallery { grid-template-columns: 1fr; } }
+
+  /* Content sections */
+  .case-section { padding-bottom: clamp(48px, 7vw, 72px); }
+  .case-section h2 { font-size: clamp(22px, 2.6vw, 28px); margin-bottom: clamp(18px, 2.4vw, 26px); }
+  .case-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px; }
+  .case-list li { padding-left: 22px; position: relative; color: var(--muted); line-height: 1.65; }
+  .case-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .case-list strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 4px; }
+
+  .case-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 56px); }
+  @media (max-width: 720px) { .case-cols { grid-template-columns: 1fr; gap: 48px; } }
+
+  /* Footer nav */
+  .case-foot { border-top: 0.5px solid var(--line); padding: clamp(40px, 6vw, 64px) 0; text-align: center; }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar__inner wrap">
+      <a class="logo" href="/">
+        <span class="logo__dot"></span>
+        <span>yothin</span>
+      </a>
+      <div class="topbar__right">
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="th" aria-pressed="false">TH</button>
+        </div>
+        <a class="btn" href="/#work" data-i18n="backWork">← Back to Work</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="case-head wrap">
+      <div class="case-head__meta" data-i18n="meta">LANDING PAGE · UX/UI DESIGN</div>
+      <h1>Intersant Plus Material</h1>
+      <p class="case-head__lead" data-i18n="lead">UX/UI for an aluminum installation company's landing page — built to present services clearly, showcase past projects, and turn visitors into inquiries.</p>
+
+      <div class="case-cover">
+        <img src="/assets/work/intersant-plus-material/cover.avif" alt="Intersant Plus Material landing page overview" />
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="case-section">
+        <h2 data-i18n="reqTitle">Requirement</h2>
+        <ul class="case-list">
+          <li><strong data-i18n="req1Title">Present services and company clearly</strong><span data-i18n="req1Body">Dedicated pages describing the company and each aluminum installation service offered.</span></li>
+          <li><strong data-i18n="req2Title">Showcase past installations</strong><span data-i18n="req2Body">A project gallery displaying completed work as proof of quality and experience.</span></li>
+          <li><strong data-i18n="req3Title">Build trust with testimonials</strong><span data-i18n="req3Body">Customer testimonials front and center to support credibility.</span></li>
+          <li><strong data-i18n="req4Title">Make contact effortless</strong><span data-i18n="req4Body">Phone, email, an inquiry form, and an embedded map in one place.</span></li>
+          <li><strong data-i18n="req5Title">Be fast and SEO-ready</strong><span data-i18n="req5Body">Mobile and desktop responsive, quick to load, and optimized to rank in search.</span></li>
+        </ul>
+      </section>
+
+      <section class="case-section">
+        <div class="case-cols">
+          <div>
+            <h2 data-i18n="objTitle">Objective</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="obj1Title">Build credibility and trust</strong><span data-i18n="obj1Body">Present the brand as reliable for aluminum installation work.</span></li>
+              <li><strong data-i18n="obj2Title">Generate inquiries</strong><span data-i18n="obj2Body">Turn visits into real service requests.</span></li>
+              <li><strong data-i18n="obj3Title">Help clients decide</strong><span data-i18n="obj3Body">Use real project photos as decision-making aids.</span></li>
+              <li><strong data-i18n="obj4Title">Centralize information</strong><span data-i18n="obj4Body">One hub for services, projects, and contact details.</span></li>
+            </ul>
+          </div>
+          <div>
+            <h2 data-i18n="goalTitle">Goal</h2>
+            <ul class="case-list">
+              <li><strong data-i18n="goal1Title">Grow inquiries</strong><span data-i18n="goal1Body">Increase website traffic and inquiries as the main acquisition channel.</span></li>
+              <li><strong data-i18n="goal2Title">Rank on search</strong><span data-i18n="goal2Body">Be visible when customers search for aluminum installation services.</span></li>
+              <li><strong data-i18n="goal3Title">Reflect quality</strong><span data-i18n="goal3Body">Let the design and content speak to reliability and craftsmanship.</span></li>
+              <li><strong data-i18n="goal4Title">Scale with the business</strong><span data-i18n="goal4Body">Support new services and pages as the business grows.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="case-foot">
+    <a class="btn" href="/#work" data-i18n="backAll">← Back to all projects</a>
+  </footer>
+
+  <script>
+    const CASE_I18N = {
+      en: {
+        backWork: '← Back to Work', backAll: '← Back to all projects',
+        meta: 'LANDING PAGE · UX/UI DESIGN',
+        lead: 'UX/UI for an aluminum installation company\'s landing page — built to present services clearly, showcase past projects, and turn visitors into inquiries.',
+        reqTitle: 'Requirement',
+        req1Title: 'Present services and company clearly', req1Body: 'Dedicated pages describing the company and each aluminum installation service offered.',
+        req2Title: 'Showcase past installations', req2Body: 'A project gallery displaying completed work as proof of quality and experience.',
+        req3Title: 'Build trust with testimonials', req3Body: 'Customer testimonials front and center to support credibility.',
+        req4Title: 'Make contact effortless', req4Body: 'Phone, email, an inquiry form, and an embedded map in one place.',
+        req5Title: 'Be fast and SEO-ready', req5Body: 'Mobile and desktop responsive, quick to load, and optimized to rank in search.',
+        objTitle: 'Objective',
+        obj1Title: 'Build credibility and trust', obj1Body: 'Present the brand as reliable for aluminum installation work.',
+        obj2Title: 'Generate inquiries', obj2Body: 'Turn visits into real service requests.',
+        obj3Title: 'Help clients decide', obj3Body: 'Use real project photos as decision-making aids.',
+        obj4Title: 'Centralize information', obj4Body: 'One hub for services, projects, and contact details.',
+        goalTitle: 'Goal',
+        goal1Title: 'Grow inquiries', goal1Body: 'Increase website traffic and inquiries as the main acquisition channel.',
+        goal2Title: 'Rank on search', goal2Body: 'Be visible when customers search for aluminum installation services.',
+        goal3Title: 'Reflect quality', goal3Body: 'Let the design and content speak to reliability and craftsmanship.',
+        goal4Title: 'Scale with the business', goal4Body: 'Support new services and pages as the business grows.',
+      },
+      th: {
+        backWork: '← กลับไปหน้าผลงาน', backAll: '← กลับไปดูผลงานทั้งหมด',
+        meta: 'LANDING PAGE · UX/UI DESIGN',
+        lead: 'ออกแบบ UX/UI ให้ landing page ของบริษัทรับติดตั้งอลูมิเนียม เน้นนำเสนอบริการให้ชัดเจน โชว์ผลงานที่ผ่านมา และเปลี่ยนผู้เข้าชมให้กลายเป็นลูกค้าที่ทักมาสอบถาม',
+        reqTitle: 'ความต้องการ',
+        req1Title: 'นำเสนอบริการและบริษัทให้ชัดเจน', req1Body: 'มีหน้าแยกอธิบายบริษัทและบริการติดตั้งอลูมิเนียมแต่ละประเภท',
+        req2Title: 'โชว์ผลงานการติดตั้งที่ผ่านมา', req2Body: 'แกลเลอรีผลงานที่ทำเสร็จแล้ว เพื่อเป็นหลักฐานยืนยันคุณภาพและความเชี่ยวชาญ',
+        req3Title: 'สร้างความน่าเชื่อถือด้วย testimonial', req3Body: 'นำคำรีวิวจากลูกค้าจริงมาแสดงให้เห็นชัด เพื่อเสริมความน่าเชื่อถือ',
+        req4Title: 'ติดต่อได้ง่าย', req4Body: 'รวมเบอร์โทร อีเมล ฟอร์มสอบถาม และแผนที่ Google Maps ไว้ในที่เดียว',
+        req5Title: 'เร็วและพร้อม SEO', req5Body: 'รองรับ responsive ทั้งมือถือและเดสก์ท็อป โหลดเร็ว และ optimize ให้ติดอันดับการค้นหา',
+        objTitle: 'วัตถุประสงค์',
+        obj1Title: 'สร้างความน่าเชื่อถือ', obj1Body: 'นำเสนอแบรนด์ให้ดูน่าเชื่อถือสำหรับงานติดตั้งอลูมิเนียม',
+        obj2Title: 'สร้างยอดสอบถาม', obj2Body: 'เปลี่ยนผู้เข้าชมเว็บให้กลายเป็นคำขอใช้บริการจริง',
+        obj3Title: 'ช่วยลูกค้าตัดสินใจ', obj3Body: 'ใช้ภาพผลงานจริงเป็นตัวช่วยในการตัดสินใจ',
+        obj4Title: 'รวมข้อมูลไว้ที่เดียว', obj4Body: 'เป็นศูนย์กลางข้อมูลบริการ ผลงาน และช่องทางติดต่อ',
+        goalTitle: 'เป้าหมาย',
+        goal1Title: 'เพิ่มยอดสอบถาม', goal1Body: 'เพิ่มทราฟฟิกและคำสอบถามผ่านเว็บไซต์ในฐานะช่องทางหลักในการหาลูกค้า',
+        goal2Title: 'ติดอันดับการค้นหา', goal2Body: 'ให้เว็บไซต์ติดอันดับเมื่อลูกค้าค้นหาบริการติดตั้งอลูมิเนียม',
+        goal3Title: 'สะท้อนคุณภาพงาน', goal3Body: 'ให้ดีไซน์และเนื้อหาสื่อถึงความน่าเชื่อถือและความประณีตของงาน',
+        goal4Title: 'เติบโตไปพร้อมธุรกิจ', goal4Body: 'รองรับบริการและหน้าใหม่ๆ ที่จะเพิ่มขึ้นตามการเติบโตของธุรกิจ',
+      },
+    };
+
+    function applyCaseLang(lang) {
+      const t = CASE_I18N[lang];
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] != null) el.textContent = t[key];
+      });
+      document.querySelectorAll('.lang button').forEach(b =>
+        b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+      localStorage.setItem('lang', lang);
+    }
+
+    document.querySelectorAll('.lang button').forEach(b =>
+      b.addEventListener('click', () => applyCaseLang(b.dataset.lang)));
+
+    applyCaseLang(localStorage.getItem('lang') === 'th' ? 'th' : 'en');
+  </script>
+
+</body>
+</html>
