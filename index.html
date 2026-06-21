@@ -493,32 +493,44 @@
   .mock__traffic span:nth-child(2) { background: #febc2e; }
   .mock__traffic span:nth-child(3) { background: #28c840; }
   .mock__filename { font-family: var(--mono); font-size: 9px; color: var(--faint); }
-  .mock__code { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
-  .mock__codeline { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; opacity: 0; transform: translateX(-8px); }
-  .mock__codeline--comment { color: var(--faint); font-style: italic; }
-  .mock__caret { display: inline-block; color: var(--accent); opacity: 0; }
+  .mock__code { padding: 10px 12px; display: flex; font-family: var(--mono); font-size: 10px; line-height: 2; overflow: hidden; }
+  .mock__lineno { color: var(--faint); opacity: .55; text-align: right; padding-right: 10px; user-select: none; flex-shrink: 0; }
+  .mock__lines { flex: 1; min-width: 0; }
+  .mock__codeline { white-space: nowrap; opacity: 0; transform: translateX(-8px); color: #abb2bf; }
+  .mock__codeline--kw { color: #c678dd; }
+  .mock__tok--fn { color: #61afef; }
+  .mock__tok--punct { color: #abb2bf; }
+  .mock__codeline--comment { color: #5c6370; }
+  .mock__caret { display: inline-block; color: var(--accent); }
 
-  /* one-shot typewriter reveal — plays once when scrolled into view, then holds */
-  .mock__build.is-playing .mock__editor { animation: editor-reveal 0.6s ease-out forwards; }
-  .mock__build.is-playing .mock__codeline { animation: codeline-in 0.3s ease-out forwards; }
-  .mock__build.is-playing .mock__codeline:nth-child(1) { animation-delay: .30s; }
-  .mock__build.is-playing .mock__codeline:nth-child(2) { animation-delay: .45s; }
-  .mock__build.is-playing .mock__codeline:nth-child(3) { animation-delay: .60s; }
-  .mock__build.is-playing .mock__codeline:nth-child(4) { animation-delay: .75s; }
-  .mock__build.is-playing .mock__codeline:nth-child(5) { animation-delay: .90s; }
-  .mock__build.is-playing .mock__codeline:nth-child(6) { animation-delay: 1.05s; }
-  .mock__build.is-playing .mock__codeline:nth-child(7) { animation-delay: 1.20s; }
-  /* caret stays hidden until the last line has finished typing, then blinks forever */
-  .mock__build.is-playing .mock__caret { animation: caret-blink 0.8s ease-in-out 1.5s infinite alternate; }
+  /* looping typewriter — slides in, types out, fades, repeats every 8s while in view */
+  .mock__build.is-playing .mock__editor { animation: editor-slidein 8s ease-in-out infinite; }
+  .mock__build.is-playing .mock__codeline { animation: codeline-typein 8s ease-out infinite; }
+  .mock__build.is-playing .mock__codeline:nth-child(1) { animation-delay: 0s; }
+  .mock__build.is-playing .mock__codeline:nth-child(2) { animation-delay: .5s; }
+  .mock__build.is-playing .mock__codeline:nth-child(3) { animation-delay: 1s; }
+  .mock__build.is-playing .mock__codeline:nth-child(4) { animation-delay: 1.5s; }
+  .mock__build.is-playing .mock__codeline:nth-child(5) { animation-delay: 2s; }
+  .mock__build.is-playing .mock__codeline:nth-child(6) { animation-delay: 2.5s; }
+  .mock__build.is-playing .mock__codeline:nth-child(7) { animation-delay: 3s; }
+  .mock__build.is-playing .mock__caret { animation: caret-blink 1s steps(1) infinite; }
 
-  @keyframes editor-reveal { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes codeline-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: translateX(0); } }
-  @keyframes caret-blink { from { opacity: 1; } to { opacity: .15; } }
+  @keyframes editor-slidein {
+    0%        { transform: translateX(40px); opacity: .4; }
+    10%, 92%  { transform: translateX(0); opacity: 1; }
+    100%      { transform: translateX(40px); opacity: .4; }
+  }
+  @keyframes codeline-typein {
+    0%, 3%   { opacity: 0; transform: translateX(-8px); }
+    8%, 90%  { opacity: 1; transform: translateX(0); }
+    100%     { opacity: 0; transform: translateX(-8px); }
+  }
+  @keyframes caret-blink { 50% { opacity: 0; } }
 
   @media (prefers-reduced-motion: reduce) {
     html:not(.force-motion) .mock__build.is-playing .mock__editor,
-    html:not(.force-motion) .mock__build.is-playing .mock__codeline,
-    html:not(.force-motion) .mock__build.is-playing .mock__caret { animation: none; opacity: 1; transform: translateX(0); }
+    html:not(.force-motion) .mock__build.is-playing .mock__codeline { animation: none; opacity: 1; transform: translateX(0); }
+    html:not(.force-motion) .mock__build.is-playing .mock__caret { animation: none; opacity: 1; }
   }
 
   /* mock: sync avatars */
@@ -1140,13 +1152,16 @@
               <span class="mock__filename">Navbar.tsx</span>
             </div>
             <div class="mock__code">
-              <div class="mock__codeline" style="padding-left:0px">export const Navbar = () =&gt; {</div>
-              <div class="mock__codeline" style="padding-left:14px">const [open, setOpen] = useState(false)</div>
-              <div class="mock__codeline" style="padding-left:14px">const ref = useRef&lt;HTMLDivElement&gt;()</div>
-              <div class="mock__codeline" style="padding-left:14px">useEffect(() =&gt; {</div>
-              <div class="mock__codeline mock__codeline--comment" style="padding-left:28px">// TODO: handle scroll</div>
-              <div class="mock__codeline" style="padding-left:14px">}, [])</div>
-              <div class="mock__codeline" style="padding-left:0px">}<span class="mock__caret">▍</span></div>
+              <div class="mock__lineno">40<br>41<br>42<br>43<br>44<br>45<br>46</div>
+              <div class="mock__lines">
+                <div class="mock__codeline mock__codeline--kw" style="padding-left:0px">export const <span class="mock__tok--fn">Navbar</span> = () =&gt; {</div>
+                <div class="mock__codeline" style="padding-left:14px">const [open, setOpen] = <span class="mock__tok--fn">useState</span>()</div>
+                <div class="mock__codeline" style="padding-left:14px">const ref = <span class="mock__tok--fn">useRef</span>&lt;HTMLDiv&gt;()</div>
+                <div class="mock__codeline mock__codeline--kw" style="padding-left:14px">useEffect<span class="mock__tok--punct">(() =&gt; {</span></div>
+                <div class="mock__codeline mock__codeline--comment" style="padding-left:28px">// TODO: handle scroll</div>
+                <div class="mock__codeline" style="padding-left:14px">}, [])</div>
+                <div class="mock__codeline" style="padding-left:0px">}<span class="mock__caret">▍</span></div>
+              </div>
             </div>
           </div>
         </div>`
