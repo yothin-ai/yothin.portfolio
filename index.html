@@ -592,11 +592,43 @@
     position: absolute; top: 18px; right: 24px; font-size: 1.4rem;
     border: none; background: none; cursor: pointer; color: var(--ink);
   }
+
+  /* =========================================================
+     SCROLL-TOP BUTTON (with scroll-progress ring)
+     ========================================================= */
+  .scroll-top {
+    position: fixed; right: clamp(16px, 4vw, 28px); bottom: clamp(16px, 4vw, 28px); z-index: 70;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: oklch(0.10 0.010 285 / 0.92); border: 0.5px solid var(--line);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; padding: 0;
+    opacity: 0; pointer-events: none; transform: translateY(10px);
+    transition: opacity .25s, transform .25s, border-color .2s;
+  }
+  .scroll-top.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .scroll-top:hover { border-color: var(--accent); }
+  .scroll-top__ring { position: absolute; inset: 0; width: 48px; height: 48px; transform: rotate(-90deg); }
+  .scroll-top__bg { fill: none; stroke: var(--line); stroke-width: 2; }
+  .scroll-top__progress {
+    fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round;
+    stroke-dasharray: 100.53; stroke-dashoffset: 100.53;
+    transition: stroke-dashoffset .1s linear;
+  }
+  .scroll-top__arrow { position: relative; z-index: 1; color: var(--ink); font-size: 16px; line-height: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-top { transition: opacity .01s, transform .01s; }
+  }
   @media (max-width: 860px) {
     .nav__pill { display: none; }
     .nav__inner { grid-template-columns: 1fr auto; }
     .nav__right .btn--solid.btn--sm { display: none; }
     .hamburger { display: flex; }
+    .portrait { margin-top: 32px; min-width: 0; flex-basis: 100%; }
+    .stack-orbit { max-width: 360px; }
+    .stack-orbit__center { width: 76px; height: 76px; border-radius: 18px; }
+    .stack-orbit__center img { width: 40px; height: 40px; }
+    .stack-icon__box { width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 13px; padding: 9px; }
   }
   @media (max-width: 900px) {
     .process-grid { grid-template-columns: 1fr; }
@@ -744,35 +776,35 @@
 
             <!-- Inner ring: 4 icons, spins clockwise -->
             <div class="stack-orbit__spin" style="--spin:34s">
-              <div class="stack-icon" style="--a:0deg;--r:120px;--tcolor:#A259FF">
+              <div class="stack-icon" style="--a:0deg;--r:clamp(56px, 22vw, 120px);--tcolor:#A259FF">
                 <div class="stack-icon__box"><img src="/assets/tools/figma.svg" alt="Figma"></div>
               </div>
-              <div class="stack-icon" style="--a:90deg;--r:120px;--tcolor:#D97757">
+              <div class="stack-icon" style="--a:90deg;--r:clamp(56px, 22vw, 120px);--tcolor:#D97757">
                 <div class="stack-icon__box"><img src="/assets/tools/claude-ai.svg" alt="Claude AI"></div>
               </div>
-              <div class="stack-icon" style="--a:180deg;--r:120px;--tcolor:#FFFFFF">
+              <div class="stack-icon" style="--a:180deg;--r:clamp(56px, 22vw, 120px);--tcolor:#FFFFFF">
                 <div class="stack-icon__box"><img src="/assets/tools/windsurf.svg" alt="Windsurf"></div>
               </div>
-              <div class="stack-icon" style="--a:270deg;--r:120px;--tcolor:#FFFFFF">
+              <div class="stack-icon" style="--a:270deg;--r:clamp(56px, 22vw, 120px);--tcolor:#FFFFFF">
                 <div class="stack-icon__box"><img src="/assets/tools/framer.svg" alt="Framer"></div>
               </div>
             </div>
 
             <!-- Outer ring: 5 icons, spins counter-clockwise -->
             <div class="stack-orbit__spin stack-orbit__spin--ccw" style="--spin:50s">
-              <div class="stack-icon stack-icon--ccw" style="--a:18deg;--r:224px;--tcolor:#3186FF">
+              <div class="stack-icon stack-icon--ccw" style="--a:18deg;--r:clamp(95px, 38vw, 224px);--tcolor:#3186FF">
                 <div class="stack-icon__box"><img src="/assets/tools/gemini.svg" alt="Gemini"></div>
               </div>
-              <div class="stack-icon stack-icon--ccw" style="--a:90deg;--r:224px;--tcolor:#FFFFFF">
+              <div class="stack-icon stack-icon--ccw" style="--a:90deg;--r:clamp(95px, 38vw, 224px);--tcolor:#FFFFFF">
                 <div class="stack-icon__box"><img src="/assets/tools/notebooklm.svg" alt="NotebookLM"></div>
               </div>
-              <div class="stack-icon stack-icon--ccw" style="--a:162deg;--r:224px;--tcolor:#FF66F4">
+              <div class="stack-icon stack-icon--ccw" style="--a:162deg;--r:clamp(95px, 38vw, 224px);--tcolor:#FF66F4">
                 <div class="stack-icon__box"><img src="/assets/tools/lovable.svg" alt="Lovable"></div>
               </div>
-              <div class="stack-icon stack-icon--ccw" style="--a:234deg;--r:224px;--tcolor:#D97757">
+              <div class="stack-icon stack-icon--ccw" style="--a:234deg;--r:clamp(95px, 38vw, 224px);--tcolor:#D97757">
                 <div class="stack-icon__box"><img src="/assets/tools/claude-code.svg" alt="Claude Code"></div>
               </div>
-              <div class="stack-icon stack-icon--ccw" style="--a:306deg;--r:224px;--tcolor:#EB1000">
+              <div class="stack-icon stack-icon--ccw" style="--a:306deg;--r:clamp(95px, 38vw, 224px);--tcolor:#EB1000">
                 <div class="stack-icon__box"><img src="/assets/tools/adobe-xd.svg" alt="Adobe XD"></div>
               </div>
             </div>
@@ -867,6 +899,14 @@
       </div>
     </div>
   </footer>
+
+  <button class="scroll-top" id="scroll-top" type="button" aria-label="Back to top">
+    <svg class="scroll-top__ring" viewBox="0 0 36 36" aria-hidden="true">
+      <circle class="scroll-top__bg" cx="18" cy="18" r="16"></circle>
+      <circle class="scroll-top__progress" cx="18" cy="18" r="16"></circle>
+    </svg>
+    <span class="scroll-top__arrow">↑</span>
+  </button>
 
   <script>
   /* =========================================================
@@ -1290,6 +1330,39 @@
       }
     });
   }
+
+  /* =========================================================
+     SCROLL-TOP BUTTON + SCROLL PROGRESS RING
+     ========================================================= */
+  (function () {
+    const btn = document.getElementById('scroll-top');
+    const ring = document.querySelector('.scroll-top__progress');
+    if (!btn || !ring) return;
+    const CIRC = 2 * Math.PI * 16;
+    let ticking = false;
+
+    function update() {
+      const scrollTop = window.scrollY;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(scrollTop / max, 1) : 0;
+      ring.style.strokeDashoffset = String(CIRC * (1 - pct));
+      btn.classList.toggle('is-visible', scrollTop > 400);
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    update();
+  })();
 
   /* =========================================================
      HERO PARTICLES
